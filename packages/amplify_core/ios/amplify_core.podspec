@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
   s.dependency 'Flutter'
   s.dependency 'Amplify'
   s.dependency 'AWSPluginsCore', '1.1.1'
-  s.dependency 'AmplifyPlugins/AWSCognitoAuthPlugin'
+  s.dependency 'AmplifyPlugins/AWSCognitoAuthPlugin', '1.1.1'
   s.platform = :ios, '11.0'
 
   # Flutter.framework does not contain a i386 slice. Only x86_64 simulators are supported.
