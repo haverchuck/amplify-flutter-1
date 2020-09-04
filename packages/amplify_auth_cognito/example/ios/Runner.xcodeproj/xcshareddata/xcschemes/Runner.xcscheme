@@ -47,6 +47,16 @@
                ReferencedContainer = "container:Runner.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "9C4612B52502B9CE00DD7DE0"
+               BuildableName = "amplify_auth_cognito_exampleTests.xctest"
+               BlueprintName = "amplify_auth_cognito_exampleTests"
+               ReferencedContainer = "container:Runner.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
