@@ -31,7 +31,33 @@ commands:
             source $BASH_ENV
             git clone --branch ${FLUTTER_BRANCH} https://github.com/flutter/flutter.git ${FLUTTER_HOME}
             (yes || true) | flutter doctor --android-licenses && flutter doctor
-
+  get_amplify_config:
+    description: Retrieves amplifyconfiguration.dart from S3
+    steps:
+      -run:
+        name: Download with CDK
+        command: |
+          mkdir ~/temp-config
+          aws s3 cp s3://test-integration-methodabc/amplifyconfiguration.dart ~/temp-config/
+  configure_aws:
+    description: >-
+      install aws cli and configure android aws release profile
+    steps:
+      - run:
+          name: install aws cli
+          command: |
+            sudo pip install awscli
+      - run:
+          name: configure aws profile
+          command: |
+            mkdir ~/.aws
+            echo -e "[default]\naws_access_key_id=${AWS_ACCESS_KEY_ID_TEST}\naws_secret_access_key=${AWS_SECRET_ACCESS_KEY_TEST}\n" >> ~/.aws/credentials
+            echo -e "[default]\nregion=us-west-2\noutput=json\n" > ~/.aws/config
+  amplify_symlink:
+    description: Create symlink to downloaded config file
+    steps:
+      -run:
+        command: ln -s ~/temp_config/amplifyconfiguration.dart ./lib/amplifyconfiguration.dart
 jobs:
   unit_test_flutter:
     executor: docker-executor
@@ -97,7 +123,26 @@ jobs:
           path: ~/test-results
       - store_artifacts:
           path: ~/test-results/junit
-
+  int_test_emulator_android:
+    macos:
+      xcode: "11.4.1"
+    environment:
+      JVM_OPTS: -Xmx3200m
+      HOMEBREW_NO_AUTO_UPDATE: '1'
+    steps:
+      - checkout
+      - macos_setup_android
+      - install_flutter
+      - setup_android_emulator
+      - configure_aws
+      - get_amplify_config
+      - amplify-symlink
+      - run:
+          name: Run flutter drive
+          no_output_timeout: 30m
+          command: flutter drive --target=test_driver/app.dart
+      - store_artifacts:
+          path: logcat.log
 releasable_branches: &releasable_branches
   branches:
     only:
