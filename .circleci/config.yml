@@ -61,7 +61,7 @@ commands:
       - run:
           name: create symlink
           command: |
-            ln -s ~/temp_config/amplifyconfiguration.dart ./lib/amplifyconfiguration.dart
+            ln -s ~/temp_config/amplifyconfiguration.dart ./packages/amplify_auth_cognito/example/lib/amplifyconfiguration.dart
   macos_setup_android:
     description: >-
       Set up the Android environment in macOS.
