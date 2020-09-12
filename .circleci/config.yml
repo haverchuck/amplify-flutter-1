@@ -32,7 +32,8 @@ commands:
             git clone --branch ${FLUTTER_BRANCH} https://github.com/flutter/flutter.git ${FLUTTER_HOME}
             (yes || true) | flutter doctor --android-licenses && flutter doctor
   get_amplify_config:
-    description: Retrieves amplifyconfiguration.dart from S3
+    description: 
+      Retrieves amplifyconfiguration.dart from S3
     steps:
       -run:
         name: Download with CDK
@@ -54,7 +55,8 @@ commands:
             echo -e "[default]\naws_access_key_id=${AWS_ACCESS_KEY_ID_TEST}\naws_secret_access_key=${AWS_SECRET_ACCESS_KEY_TEST}\n" >> ~/.aws/credentials
             echo -e "[default]\nregion=us-west-2\noutput=json\n" > ~/.aws/config
   amplify_symlink:
-    description: Create symlink to downloaded config file
+    description: 
+      Create symlink to downloaded config file
     steps:
       -run:
         command: ln -s ~/temp_config/amplifyconfiguration.dart ./lib/amplifyconfiguration.dart
