@@ -59,8 +59,9 @@ commands:
       Create symlink to downloaded config file
     steps:
       - run:
-        name: create symlink
-        command: ln -s ~/temp_config/amplifyconfiguration.dart ./lib/amplifyconfiguration.dart
+          name: create symlink
+          command: |
+            ln -s ~/temp_config/amplifyconfiguration.dart ./lib/amplifyconfiguration.dart
 jobs:
   unit_test_flutter:
     executor: docker-executor
