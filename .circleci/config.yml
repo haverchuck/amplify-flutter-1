@@ -38,8 +38,8 @@ commands:
       - run:
           name: Download with CDK
           command: |
-            mkdir ~/temp-config
-            aws s3 cp s3://test-integration-methodabc/amplifyconfiguration.dart ~/temp-config/
+            mkdir ~/temp_config
+            aws s3 cp s3://test-integration-methodabc/amplifyconfiguration.dart ~/temp_config/
   configure_aws:
     description:
       install aws cli and configure android aws release profile
@@ -61,7 +61,7 @@ commands:
       - run:
           name: create symlink
           command: |
-            ln -s ~/temp_config/amplifyconfiguration.dart ./packages/amplify_auth_cognito/example/lib/amplifyconfiguration.dart
+            ln -s ~/temp_config/amplifyconfiguration.dart ~/amplify-flutter/packages/amplify_auth_cognito/example/lib/amplifyconfiguration.dart
   macos_setup_android:
     description: >-
       Set up the Android environment in macOS.
