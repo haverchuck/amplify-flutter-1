@@ -36,10 +36,10 @@ commands:
       Retrieves amplifyconfiguration.dart from S3
     steps:
       - run:
-        name: Download with CDK
-        command: |
-          mkdir ~/temp-config
-          aws s3 cp s3://test-integration-methodabc/amplifyconfiguration.dart ~/temp-config/
+          name: Download with CDK
+          command: |
+            mkdir ~/temp-config
+            aws s3 cp s3://test-integration-methodabc/amplifyconfiguration.dart ~/temp-config/
   configure_aws:
     description:
       install aws cli and configure android aws release profile
@@ -59,6 +59,7 @@ commands:
       Create symlink to downloaded config file
     steps:
       -run:
+        name: create symlink
         command: ln -s ~/temp_config/amplifyconfiguration.dart ./lib/amplifyconfiguration.dart
 jobs:
   unit_test_flutter:
