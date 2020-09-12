@@ -35,7 +35,7 @@ commands:
     description: 
       Retrieves amplifyconfiguration.dart from S3
     steps:
-      -run:
+      - run:
         name: Download with CDK
         command: |
           mkdir ~/temp-config
