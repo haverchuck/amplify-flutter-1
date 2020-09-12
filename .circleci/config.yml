@@ -62,6 +62,42 @@ commands:
           name: create symlink
           command: |
             ln -s ~/temp_config/amplifyconfiguration.dart ./lib/amplifyconfiguration.dart
+  macos_setup_android:
+    description: >-
+      Set up the Android environment in macOS.
+    steps:
+      - run:
+          name: Set up env
+          command: ./.circleci/android-flutter.sh export-env
+      - run:
+          name: Install Android SDK from Homebrew
+          command: |
+            brew tap homebrew/cask >/dev/null
+            brew cask install android-sdk >/dev/null
+      - run:
+          name: Install emulator from SDK manager
+          command: ./.circleci/android-flutter.sh sdkmanager
+  setup_android_emulator:
+    description: >-
+      Setup Android emulator.
+    steps:
+      - run:
+          name: Setup emulator
+          command: ./.circleci/android-flutter.sh create-emulator
+      - run:
+          name: Launch emulator
+          command: ./.circleci/android-flutter.sh start-emulator
+          background: true
+      - run:
+          name: Launch logcat
+          command:
+            adb logcat > logcat.log
+          background: true
+      - run:
+          name: Wait emulator
+          command: |
+            ./.circleci/android-flutter.sh wait-for-avd
+            python3 .circleci/unlock_emulator_screen.py
 jobs:
   unit_test_flutter:
     executor: docker-executor
@@ -136,7 +172,7 @@ jobs:
       HOMEBREW_NO_AUTO_UPDATE: '1'
     steps:
       - checkout
-      # - macos_setup_android
+      - macos_setup_android
       - install_flutter
       - setup_android_emulator
       - configure_aws
