@@ -138,7 +138,7 @@ jobs:
       - setup_android_emulator
       - configure_aws
       - get_amplify_config
-      - amplify-symlink
+      - amplify_symlink
       - run:
           name: Run flutter drive
           no_output_timeout: 30m
