@@ -58,7 +58,7 @@ commands:
     description: 
       Create symlink to downloaded config file
     steps:
-      -run:
+      - run:
         name: create symlink
         command: ln -s ~/temp_config/amplifyconfiguration.dart ./lib/amplifyconfiguration.dart
 jobs:
