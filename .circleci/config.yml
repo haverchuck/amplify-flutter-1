@@ -41,7 +41,7 @@ commands:
           mkdir ~/temp-config
           aws s3 cp s3://test-integration-methodabc/amplifyconfiguration.dart ~/temp-config/
   configure_aws:
-    description: >-
+    description:
       install aws cli and configure android aws release profile
     steps:
       - run:
