@@ -144,7 +144,9 @@ jobs:
       - run:
           name: Run flutter drive
           no_output_timeout: 30m
-          command: flutter drive --target=test_driver/app.dart
+          command: |
+            cd packages/amplify_auth_cognito/example
+            flutter drive --target=test_driver/app.dart
       - store_artifacts:
           path: logcat.log
 releasable_branches: &releasable_branches
@@ -156,5 +158,6 @@ releasable_branches: &releasable_branches
 workflows:
   test_deploy:
     jobs:
-      - unit_test_flutter
-      - unit_test_android
+      - int_test_emulator_android
+      # - unit_test_flutter
+      # - unit_test_android
