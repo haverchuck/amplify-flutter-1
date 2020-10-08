@@ -64,7 +64,7 @@ for plugin_dir in */; do
             ;;
         ios-test)
             echo "=== Running iOS unit tests for $plugin ==="
-            if [ -d "ios/Tests" ]; then
+            if [ -d "example/ios/Tests" ]; then
                 XCODEBUILD_DESTINATION="platform=iOS Simulator,name=iPhone 11,OS=13.6"
                 if [ ! -d "example/ios" ]; then
                     echo "FAILED: example/ios missing, can't run tests."
