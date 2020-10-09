@@ -16,7 +16,7 @@
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
 		9C404087251AA2430036C5FE /* MockAuthSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C404086251AA2430036C5FE /* MockAuthSession.swift */; };
 		9CEFDF1525113C2F001481FC /* amplify_auth_cognito_tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CEFDF1425113C2F001481FC /* amplify_auth_cognito_tests.swift */; };
-		F2DA8B5C977629D804F82231 /* Pods_amplify_auth_cognito_tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D32371001FAB7B1A4BE60D5 /* Pods_amplify_auth_cognito_tests.framework */; };
+		F2DA8B5C977629D804F82231 /* Pods_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D32371001FAB7B1A4BE60D5 /* Pods_Tests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -33,19 +33,19 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0D32371001FAB7B1A4BE60D5 /* Pods_amplify_auth_cognito_tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_amplify_auth_cognito_tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0D32371001FAB7B1A4BE60D5 /* Pods_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D7A73413D1932957B42A25E /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
 		3D23EF9D73AD2AD9798E569E /* Pods-amplify_auth_cognito_exampleTests.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-amplify_auth_cognito_exampleTests.profile.xcconfig"; path = "Target Support Files/Pods-amplify_auth_cognito_exampleTests/Pods-amplify_auth_cognito_exampleTests.profile.xcconfig"; sourceTree = "<group>"; };
-		70792C7D5D111297D530598A /* Pods-amplify_auth_cognito_tests.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-amplify_auth_cognito_tests.profile.xcconfig"; path = "Target Support Files/Pods-amplify_auth_cognito_tests/Pods-amplify_auth_cognito_tests.profile.xcconfig"; sourceTree = "<group>"; };
+		70792C7D5D111297D530598A /* Pods-Tests.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.profile.xcconfig"; path = "Target Support Files/Pods-Tests/Pods-Tests.profile.xcconfig"; sourceTree = "<group>"; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
 		74858FAE1ED2DC5600515810 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		77E8D0F580AB656481259C9E /* Pods-amplify_auth_cognito_exampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-amplify_auth_cognito_exampleTests.release.xcconfig"; path = "Target Support Files/Pods-amplify_auth_cognito_exampleTests/Pods-amplify_auth_cognito_exampleTests.release.xcconfig"; sourceTree = "<group>"; };
 		7AFA3C8E1D35360C0083082E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Release.xcconfig; path = Flutter/Release.xcconfig; sourceTree = "<group>"; };
 		7F732F1CF7D7EF9EA74B414F /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
-		80124382FBEC0C28907448DD /* Pods-amplify_auth_cognito_tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-amplify_auth_cognito_tests.debug.xcconfig"; path = "Target Support Files/Pods-amplify_auth_cognito_tests/Pods-amplify_auth_cognito_tests.debug.xcconfig"; sourceTree = "<group>"; };
+		80124382FBEC0C28907448DD /* Pods-Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.debug.xcconfig"; path = "Target Support Files/Pods-Tests/Pods-Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		9740EEB21CF90195004384FC /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Debug.xcconfig; path = Flutter/Debug.xcconfig; sourceTree = "<group>"; };
 		9740EEB31CF90195004384FC /* Generated.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Generated.xcconfig; path = Flutter/Generated.xcconfig; sourceTree = "<group>"; };
 		97C146EE1CF9000F007C117D /* Runner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Runner.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -60,7 +60,7 @@
 		B9187703880B15C5125F5D1F /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
 		D3CF4B029A33413539369E68 /* Pods-amplify_auth_cognito_exampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-amplify_auth_cognito_exampleTests.debug.xcconfig"; path = "Target Support Files/Pods-amplify_auth_cognito_exampleTests/Pods-amplify_auth_cognito_exampleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		EE1727BF3FA0D464713D41A3 /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		F65D9F4C08DFEA723F1D8629 /* Pods-amplify_auth_cognito_tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-amplify_auth_cognito_tests.release.xcconfig"; path = "Target Support Files/Pods-amplify_auth_cognito_tests/Pods-amplify_auth_cognito_tests.release.xcconfig"; sourceTree = "<group>"; };
+		F65D9F4C08DFEA723F1D8629 /* Pods-Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.release.xcconfig"; path = "Target Support Files/Pods-Tests/Pods-Tests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,7 +76,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F2DA8B5C977629D804F82231 /* Pods_amplify_auth_cognito_tests.framework in Frameworks */,
+				F2DA8B5C977629D804F82231 /* Pods_Tests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -149,9 +149,9 @@
 				D3CF4B029A33413539369E68 /* Pods-amplify_auth_cognito_exampleTests.debug.xcconfig */,
 				77E8D0F580AB656481259C9E /* Pods-amplify_auth_cognito_exampleTests.release.xcconfig */,
 				3D23EF9D73AD2AD9798E569E /* Pods-amplify_auth_cognito_exampleTests.profile.xcconfig */,
-				80124382FBEC0C28907448DD /* Pods-amplify_auth_cognito_tests.debug.xcconfig */,
-				F65D9F4C08DFEA723F1D8629 /* Pods-amplify_auth_cognito_tests.release.xcconfig */,
-				70792C7D5D111297D530598A /* Pods-amplify_auth_cognito_tests.profile.xcconfig */,
+				80124382FBEC0C28907448DD /* Pods-Tests.debug.xcconfig */,
+				F65D9F4C08DFEA723F1D8629 /* Pods-Tests.release.xcconfig */,
+				70792C7D5D111297D530598A /* Pods-Tests.profile.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -160,7 +160,7 @@
 			isa = PBXGroup;
 			children = (
 				EE1727BF3FA0D464713D41A3 /* Pods_Runner.framework */,
-				0D32371001FAB7B1A4BE60D5 /* Pods_amplify_auth_cognito_tests.framework */,
+				0D32371001FAB7B1A4BE60D5 /* Pods_Tests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -275,15 +275,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-amplify_auth_cognito_tests/Pods-amplify_auth_cognito_tests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Tests/Pods-Tests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-amplify_auth_cognito_tests/Pods-amplify_auth_cognito_tests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Tests/Pods-Tests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-amplify_auth_cognito_tests/Pods-amplify_auth_cognito_tests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Tests/Pods-Tests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		24D41A5CC7E22178A374BFD2 /* [CP] Check Pods Manifest.lock */ = {
@@ -351,7 +351,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-amplify_auth_cognito_tests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Tests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -668,7 +668,7 @@
 		};
 		9CEFDF1725113C2F001481FC /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 80124382FBEC0C28907448DD /* Pods-amplify_auth_cognito_tests.debug.xcconfig */;
+			baseConfigurationReference = 80124382FBEC0C28907448DD /* Pods-Tests.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -678,7 +678,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = W3DRXD72QU;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = amplify_auth_cognito_tests/Info.plist;
+				INFOPLIST_FILE = Tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -698,7 +698,7 @@
 		};
 		9CEFDF1825113C2F001481FC /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F65D9F4C08DFEA723F1D8629 /* Pods-amplify_auth_cognito_tests.release.xcconfig */;
+			baseConfigurationReference = F65D9F4C08DFEA723F1D8629 /* Pods-Tests.release.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -708,7 +708,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = W3DRXD72QU;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = amplify_auth_cognito_tests/Info.plist;
+				INFOPLIST_FILE = Tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -725,7 +725,7 @@
 		};
 		9CEFDF1925113C2F001481FC /* Profile */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 70792C7D5D111297D530598A /* Pods-amplify_auth_cognito_tests.profile.xcconfig */;
+			baseConfigurationReference = 70792C7D5D111297D530598A /* Pods-Tests.profile.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -735,7 +735,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = W3DRXD72QU;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = amplify_auth_cognito_tests/Info.plist;
+				INFOPLIST_FILE = Tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

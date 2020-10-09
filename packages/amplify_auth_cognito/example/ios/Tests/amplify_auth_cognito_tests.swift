@@ -41,7 +41,7 @@ let _accessToken: String = "myAccessToken"
 let _refreshToken: String = "myRefreshToken"
 
 
-class amplify_auth_cognito_tests: XCTestCase {
+class Tests: XCTestCase {
     
     var plugin: SwiftAuthCognito = SwiftAuthCognito()
     var mockCognito: AuthCognitoBridge = AuthCognitoBridge()
