@@ -52,6 +52,7 @@ class AmplifyDataStorePlugin : FlutterPlugin, MethodCallHandler {
         when (call.method) {
             "query" -> onQuery(result, data)
             "configure" -> onConfigure(result, data)
+            "deleteInstance" -> onDeleteInstance(result, data)
         }
     }
 
@@ -87,7 +88,7 @@ class AmplifyDataStorePlugin : FlutterPlugin, MethodCallHandler {
     @VisibleForTesting
     fun onQuery(flutterResult: Result, request: HashMap<String, Any>) {
         // Create new posts temporary
-        // createTempPosts()
+       createTempPosts()
 
         var modelName = request["modelName"] as String
         var queryOptions: QueryOptions = QueryOptionsBuilder.fromSerializedMap(request)
@@ -109,6 +110,38 @@ class AmplifyDataStorePlugin : FlutterPlugin, MethodCallHandler {
                     LOG.info("MyAmplifyApp + Query failed.$it")
                     prepareError(flutterResult, it, FlutterDataStoreFailureMessage.QUERY.toString())
                 }
+        )
+    }
+
+
+    @VisibleForTesting
+    fun onDeleteInstance(flutterResult: Result, request: HashMap<String, Any>) {
+        // Create new posts temporary
+        createTempPosts()
+
+        var modelName = request["modelName"] as String
+        var modelData = request["model"] as HashMap<String, Any>
+        var queryOptions: QueryOptions = QueryOptionsBuilder.fromSerializedMap(request)
+        val plugin = Amplify.DataStore.getPlugin("awsDataStorePlugin") as AWSDataStorePlugin
+
+        var instance = SerializedModel.builder()
+            .serializedData(modelData)
+            .id(modelData["id"] as String)
+            .modelName(modelName)
+            .build()
+
+        plugin.delete(
+            instance,
+            queryOptions.queryPredicate,
+            Consumer { res:  DataStoreItemChange<SerializedModel> ->
+                Handler(Looper.getMainLooper()).post {
+                    flutterResult.success(FlutterSerializedModel(res.item()).toMap())
+                }
+            },
+            Consumer { error: DataStoreException ->
+                LOG.error("Deletion Failed: " + error)
+                prepareError(flutterResult, error, FlutterDataStoreFailureMessage.DELETE.toString())
+            }
         )
     }
 
