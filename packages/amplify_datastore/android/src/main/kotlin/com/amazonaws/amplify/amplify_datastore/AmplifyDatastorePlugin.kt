@@ -88,7 +88,7 @@ class AmplifyDataStorePlugin : FlutterPlugin, MethodCallHandler {
     @VisibleForTesting
     fun onQuery(flutterResult: Result, request: HashMap<String, Any>) {
         // Create new posts temporary
-//        createTempPosts()
+       createTempPosts()
 
         var modelName = request["modelName"] as String
         var queryOptions: QueryOptions = QueryOptionsBuilder.fromSerializedMap(request)
