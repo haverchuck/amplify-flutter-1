@@ -30,5 +30,10 @@ enum class FlutterDataStoreFailureMessage {
         override fun toString(): String {
             return "AMPLIFY_DATASTORE_QUERY_FAILED"
         }
+    },
+    DELETE {
+        override fun toString(): String {
+            return "AMPLIFY_DATASTORE_DELETE_FAILED"
+        }
     }
 }

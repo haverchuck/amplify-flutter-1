@@ -22,6 +22,8 @@ const MethodChannel _channel = MethodChannel('com.amazonaws.amplify/datastore');
 
 /// An implementation of [AmplifyDataStore] that uses method channels.
 class AmplifyDataStoreMethodChannel extends AmplifyDataStore {
+
+
   @override
   Future<List<T>> query<T extends Model>(ModelType<T> modelType,
       {QueryPredicate where,
@@ -39,6 +41,23 @@ class AmplifyDataStoreMethodChannel extends AmplifyDataStore {
         .map((serializedResult) => modelType.fromJson(
             new Map<String, dynamic>.from(serializedResult["serializedData"])))
         .toList();
+  }
+
+  @override
+  Future<T> deleteInstance<T extends Model>({@required T model, QueryPredicate when}) async {
+
+    var modelJson = model.toJson();
+
+    final Map<dynamic, dynamic> serializedResult =
+    await _channel.invokeMapMethod('deleteInstance', <String, dynamic>{
+
+
+      'modelName': model.instanceType.modelName(),
+      'model': modelJson,
+      'queryPredicate': when?.serializeAsMap(),
+    });
+
+    return model.instanceType.fromJson(new Map<String, dynamic>.from(serializedResult["serializedData"]));
   }
 
   Future<void> configure({@required List<ModelSchema> modelSchemas}) async {
