@@ -48,7 +48,11 @@ abstract class DataStorePluginInterface extends PlatformInterface {
   }
 
   Future<T> deleteInstance<T extends Model>({@required T model, QueryPredicate when}) {
-    throw UnimplementedError('delete() has not been implemented.');
+    throw UnimplementedError('deleteInstance() has not been implemented.');
+  }
+
+  Future<List<T>> deleteWhen<T extends Model>({@required ModelType<T> modelType, @required QueryPredicate when}) {
+    throw UnimplementedError('deleteWhen() has not been implemented.');
   }
 
   Future<void> configure({@required List<ModelSchema> modelSchemas}) {

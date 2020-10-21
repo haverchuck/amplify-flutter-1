@@ -53,4 +53,10 @@ class DataStoreCategory {
         ? plugins[0].deleteInstance(model: model, when: when)
         : throw (errorMsg);
   }
+
+  Future<List<T>> deleteWhen<T extends Model>({@required ModelType<T> modelType, @required QueryPredicate when}) {
+    return plugins.length == 1
+        ? plugins[0].deleteWhen(modelType: modelType, when: when)
+        : throw (errorMsg);
+  }
 }
