@@ -30,6 +30,8 @@ class _MyAppState extends State<MyApp> {
   String _postWithIdNotEquals = '';
   String _firstPostFromResult = '';
   String _allPostsWithoutRating2Or5 = '';
+  List<Post> _fullPosts;
+
   Amplify amplify = new Amplify();
   @override
   void initState() {
@@ -58,6 +60,10 @@ class _MyAppState extends State<MyApp> {
         .forEach((element) {
       allPosts += encoder.convert(element.toJson()) + '\n';
     });
+
+    (_fullPosts = await Amplify.DataStore.query(Post.classType,
+            sortBy: [Post.RATING.descending()]));
+
 
     (await Amplify.DataStore.query(Post.classType, where: Post.RATING.ge(4)))
         .forEach((element) {
@@ -114,6 +120,12 @@ class _MyAppState extends State<MyApp> {
       _firstPostFromResult = firstPostFromResult;
       _allPostsWithoutRating2Or5 = allPostsWithoutRating2Or5;
     });
+
+    _deleteFirst();
+  }
+
+  _deleteFirst() {
+    Amplify.DataStore.deleteInstance(model: _fullPosts[0], when: Post.RATING.eq(5));
   }
 
   @override

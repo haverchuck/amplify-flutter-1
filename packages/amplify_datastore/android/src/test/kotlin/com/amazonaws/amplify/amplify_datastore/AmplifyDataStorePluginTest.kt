@@ -23,11 +23,13 @@ import com.amplifyframework.core.model.query.Page
 import com.amplifyframework.core.model.query.QueryOptions
 import com.amplifyframework.core.model.query.Where
 import com.amplifyframework.core.model.query.predicate.QueryField.field
+import com.amplifyframework.core.model.query.predicate.QueryPredicate
 import com.amplifyframework.core.model.query.predicate.QueryPredicateOperation.not
 import com.amplifyframework.core.model.temporal.Temporal
 import com.amplifyframework.datastore.AWSDataStorePlugin
 import com.amplifyframework.datastore.DataStoreCategory
 import com.amplifyframework.datastore.DataStoreException
+import com.amplifyframework.datastore.DataStoreItemChange
 import com.amplifyframework.datastore.appsync.SerializedModel
 import io.flutter.plugin.common.MethodChannel
 import org.junit.Assert.assertEquals
@@ -47,6 +49,7 @@ class AmplifyDataStorePluginTest {
     private var mockDataStore = mock(DataStoreCategory::class.java)
     private var mockAmplifyDataStorePlugin = mock(AWSDataStorePlugin::class.java);
     private val mockResult: MethodChannel.Result = mock(MethodChannel.Result::class.java)
+
 
     private val amplifySuccessResults = mutableListOf<SerializedModel>(
             SerializedModel.builder()
@@ -117,6 +120,87 @@ class AmplifyDataStorePluginTest {
                                        "request/model_name_with_all_query_parameters.json",
                                        HashMap::class.java) as HashMap<String, Any>)
         verify(mockResult, times(1)).success(emptyList<FlutterSerializedModel>())
+    }
+
+    @Test
+    fun test_Delete_Success_Result_No_Predicates() {
+
+        var modelData: HashMap<String, Any> = hashMapOf(
+            "id" to "43036c6b-8044-4309-bddc-262b6c686026",
+            "title" to "Title 2",
+            "created" to "2020-02-20T20:20:20-08:00"
+        )
+
+        var instance = SerializedModel.builder()
+                .serializedData(modelData)
+                .id(modelData["id"] as String)
+                .modelName("Post")
+                .build()
+
+        var dataStoreItemChange = DataStoreItemChange.builder<SerializedModel>()
+                .item(instance)
+                .initiator(DataStoreItemChange.Initiator.LOCAL)
+                .itemClass(SerializedModel::class.java)
+                .type(DataStoreItemChange.Type.DELETE)
+                .randomUuid()
+                .build()
+
+        doAnswer { invocation: InvocationOnMock ->
+            (invocation.arguments[2] as Consumer<DataStoreItemChange<SerializedModel>>).accept(
+                    dataStoreItemChange)
+            null as Void?
+        }.`when`(mockAmplifyDataStorePlugin).delete(any(), any(QueryPredicate::class.java),
+                ArgumentMatchers.any<
+                        Consumer<DataStoreItemChange<SerializedModel>>>(),
+                ArgumentMatchers.any<Consumer<DataStoreException>>())
+
+        plugin.onDeleteInstance(mockResult,
+                readMapFromFile("delete_api",
+                        "request/instance_no_predicate.json",
+                        HashMap::class.java) as HashMap<String, Any>)
+
+        verify(mockResult, times(1)).success(
+               FlutterSerializedModel(instance).toMap())
+    }
+
+    @Test
+    fun test_Delete_Success_Result_With_Predicates() {
+        var modelData: HashMap<String, Any> = hashMapOf(
+                "id" to "43036c6b-8044-4309-bddc-262b6c686026",
+                "title" to "Title 2",
+                "created" to "2020-02-20T20:20:20-08:00"
+        )
+
+        var instance = SerializedModel.builder()
+                .serializedData(modelData)
+                .id(modelData["id"] as String)
+                .modelName("Post")
+                .build()
+
+        var dataStoreItemChange = DataStoreItemChange.builder<SerializedModel>()
+                .item(instance)
+                .initiator(DataStoreItemChange.Initiator.LOCAL)
+                .itemClass(SerializedModel::class.java)
+                .type(DataStoreItemChange.Type.DELETE)
+                .randomUuid()
+                .build()
+
+        doAnswer { invocation: InvocationOnMock ->
+            (invocation.arguments[2] as Consumer<DataStoreItemChange<SerializedModel>>).accept(
+                    dataStoreItemChange)
+            null as Void?
+        }.`when`(mockAmplifyDataStorePlugin).delete(any(), any(QueryPredicate::class.java),
+                ArgumentMatchers.any<
+                        Consumer<DataStoreItemChange<SerializedModel>>>(),
+                ArgumentMatchers.any<Consumer<DataStoreException>>())
+
+        plugin.onDeleteInstance(mockResult,
+                readMapFromFile("delete_api",
+                        "request/instance_with_predicate.json",
+                        HashMap::class.java) as HashMap<String, Any>)
+
+        verify(mockResult, times(1)).success(
+                FlutterSerializedModel(instance).toMap())
     }
 
     private fun setFinalStatic(field: Field, newValue: Any?) {
