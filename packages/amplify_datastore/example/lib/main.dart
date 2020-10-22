@@ -6,6 +6,7 @@ import 'dart:async';
 import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:amplify_core/amplify_core.dart';
 import 'package:amplify_datastore_plugin_interface/amplify_datastore_plugin_interface.dart';
+import 'package:flutter/services.dart';
 import 'amplifyconfiguration.dart';
 
 import 'Post.dart';
@@ -124,8 +125,15 @@ class _MyAppState extends State<MyApp> {
     _deleteFirst();
   }
 
-  _deleteFirst() {
-    Amplify.DataStore.deleteInstance(model: _fullPosts[0], when: Post.RATING.eq(5));
+  _deleteFirst() async {
+    Post fake = Post(id: _fullPosts[0].id.substring(0,  _fullPosts[0].id.length - 1) + "x", rating: 100, title: "no existo");
+    try {
+      Post deleted = await Amplify.DataStore.deleteInstance(model: fake);
+      print("Deleted Post #: " + deleted.id);
+
+    } on PlatformException catch (e) {
+      print(e);
+    }
   }
 
   @override

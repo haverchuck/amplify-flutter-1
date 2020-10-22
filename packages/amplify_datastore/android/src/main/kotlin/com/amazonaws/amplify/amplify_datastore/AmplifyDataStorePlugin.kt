@@ -117,34 +117,36 @@ class AmplifyDataStorePlugin : FlutterPlugin, MethodCallHandler {
 
     @VisibleForTesting
     fun onDeleteInstance(flutterResult: Result, request: HashMap<String, Any>) {
-        // Create new posts temporary
-        createTempPosts()
+        try {
+            var modelName = request["modelName"] as String
+            var modelData = request["model"] as HashMap<String, Any>
+            var queryOptions: QueryOptions = QueryOptionsBuilder.fromSerializedMap(request)
+            val plugin = Amplify.DataStore.getPlugin("awsDataStorePlugin") as AWSDataStorePlugin
 
-        var modelName = request["modelName"] as String
-        var modelData = request["model"] as HashMap<String, Any>
-        var queryOptions: QueryOptions = QueryOptionsBuilder.fromSerializedMap(request)
-        val plugin = Amplify.DataStore.getPlugin("awsDataStorePlugin") as AWSDataStorePlugin
+            var instance = SerializedModel.builder()
+                    .serializedData(modelData)
+                    .id(modelData["id"] as String)
+                    .modelName(modelName)
+                    .build()
 
-        var instance = SerializedModel.builder()
-            .serializedData(modelData)
-            .id(modelData["id"] as String)
-            .modelName(modelName)
-            .build()
+            plugin.delete(
+                    instance,
+                    queryOptions.queryPredicate,
+                    Consumer {
+                        LOG.info("Deleted item: " + it.item().toString())
+                        Handler(Looper.getMainLooper()).post {
+                            flutterResult.success(FlutterSerializedModel(it.item()).toMap())
+                        }
+                    },
+                    Consumer {
+                        LOG.error("Deletion Failed: " + it)
+                        prepareError(flutterResult, it, FlutterDataStoreFailureMessage.DELETE.toString())
+                    }
+            )
+        } catch (e: Exception) {
+            prepareError(flutterResult, e, FlutterDataStoreFailureMessage.DELETE.toString())
+        }
 
-        plugin.delete(
-            instance,
-            queryOptions.queryPredicate,
-            Consumer {
-                LOG.info("Deleted item: " + it.item().toString())
-                Handler(Looper.getMainLooper()).post {
-                    flutterResult.success(FlutterSerializedModel(it.item()).toMap())
-                }
-            },
-            Consumer {
-                LOG.error("Deletion Failed: " + it)
-                prepareError(flutterResult, it, FlutterDataStoreFailureMessage.DELETE.toString())
-            }
-        )
     }
 
     @VisibleForTesting
