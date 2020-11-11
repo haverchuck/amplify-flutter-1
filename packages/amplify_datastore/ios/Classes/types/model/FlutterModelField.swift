@@ -102,13 +102,9 @@ public struct FlutterModelField {
         if type == "Date" {
             return String.self
         }
-        // TODO: Serialize all fields when we do configure()
-        //        if let enumType = type as? EnumPersistable.Type {
-        //            return .enum(type: enumType)
-        //        }
-        //        if let modelType = type as? Model.Type {
-        //            return .model(name: modelType.modelName)
-        //        }
+        if let modelType = type as? Model.Type {
+            return .model(name: modelType.modelName)
+                }
         //        if let embeddedType = type as? Codable.Type {
         //            return .embedded(type: embeddedType, schema: nil)
         //        }
