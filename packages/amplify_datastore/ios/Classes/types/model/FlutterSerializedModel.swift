@@ -18,6 +18,7 @@ import Foundation
 import Amplify
 
 struct FlutterSerializedModel: Model, JSONValueHolder {
+
     
     public let id: String
     public let values: [String: JSONValue]
@@ -67,21 +68,55 @@ struct FlutterSerializedModel: Model, JSONValueHolder {
     }
     
     public func jsonValue(for key: String, modelSchema: ModelSchema) -> Any?? {
+        
         let field = modelSchema.field(withName: key)
         if case .int = field?.type,
            case .some(.number(let deserializedValue)) = values[key] {
             return Int(deserializedValue)
         }
-        return jsonValue(for: key)
+         
+        let result = jsonValue(for: key)
+        
+        if(result is [String: JSONValue]){
+            let resultMap = result as! [String: JSONValue]
+            
+            // HasMany relationship contains elements
+            if(resultMap["elements"] == nil){
+                return nil;
+            }
+            // BelongsTo relationship contains name
+            if(resultMap["name"] == nil && resultMap["id"] == nil){
+                return nil;
+            }
+            // TODO: haven't successfully generated a HasOne relationship yet
+        }
+        
+        return result 
+    }
+    
+    private func generateSerializedData(modelSchema: ModelSchema) -> [String: Any]{
+        
+        var result = [String: Any]()
+        
+        for(key, value) in values {
+            if( value != nil ){
+                result[key] = jsonValue(for: key, modelSchema: modelSchema)
+            }
+        }
+        
+        return result;
     }
     
     public func toJSON(modelSchema: ModelSchema) -> [String: Any] {
         return [
             "id": self.id,
             "modelName": modelSchema.name,
-            "serializedData": Dictionary(uniqueKeysWithValues:
+            "serializedData": generateSerializedData(modelSchema: modelSchema)
+            
+                /*Dictionary(uniqueKeysWithValues:
                                             values.map { (key: String, value: JSONValue) in
                                                 return (key, jsonValue(for: key, modelSchema: modelSchema) ?? nil) })
+                */
         ]
     }
 }

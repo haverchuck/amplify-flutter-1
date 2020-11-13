@@ -87,8 +87,8 @@ public struct FlutterModelField {
         if type == "Integer" {
             return Int64.self
         }
-        if type == "Double" {
-            return Double.self
+        else{
+            return nil;
         }
         if type == "Boolean" {
             return Bool.self
@@ -102,13 +102,6 @@ public struct FlutterModelField {
         if type == "Date" {
             return String.self
         }
-        if let modelType = type as? Model.Type {
-            return .model(name: modelType.modelName)
-                }
-        //        if let embeddedType = type as? Codable.Type {
-        //            return .embedded(type: embeddedType, schema: nil)
-        //        }
-        preconditionFailure("Could not create a ModelFieldType from \(String(describing: type)) MetaType")
     }
 
     private func convertFlutterAuthRules(flutterAuthRules : [FlutterAuthRule]?) -> [AuthRule]?{
@@ -142,4 +135,4 @@ public struct FlutterModelField {
 
 }
 
-typealias FlutterModelFields = [String: FlutterModelField]
+

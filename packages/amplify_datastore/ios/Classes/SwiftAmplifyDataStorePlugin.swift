@@ -42,6 +42,8 @@ public class SwiftAmplifyDataStorePlugin: NSObject, FlutterPlugin {
         registrar.addMethodCallDelegate(instance, channel: channel)
     }
 
+    private var isCreated : Bool = false;
+
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         var arguments: [String: Any] = [:]
         do {
