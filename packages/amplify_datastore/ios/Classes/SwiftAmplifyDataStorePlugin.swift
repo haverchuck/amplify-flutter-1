@@ -249,6 +249,7 @@ public class SwiftAmplifyDataStorePlugin: NSObject, FlutterPlugin {
     }
 
     public func onSetupObserve(flutterResult: @escaping FlutterResult) {
+        /*
         do {
             observeSubscription = try observeSubscription ?? bridge.onObserve().sink {
                 if case let .failure(error) = $0 {
