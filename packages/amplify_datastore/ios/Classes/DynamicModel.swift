@@ -1,23 +1,13 @@
-/*
- * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- *  http://aws.amazon.com/apache2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
- */
-
-import Flutter
-import Foundation
+//
+//  DynamicModel.swift
+//  DataStoreTest
+//
+//  Created by Roy, Jithin on 7/20/20.
+//  Copyright © 2020 Amazon Web Services. All rights reserved.
+//
 import Amplify
 
-struct FlutterSerializedModel: Model, JSONValueHolder {
+struct DynamicModel: Model, JSONValueHolder {
     public let id: String
 
     public var values: [String: JSONValue]
@@ -35,7 +25,7 @@ struct FlutterSerializedModel: Model, JSONValueHolder {
         
         let json = try JSONValue(from: decoder)
         let typeName = json["__typename"]
-        let modified = FlutterSerializedModel.removeReservedNames(json)
+        let modified = DynamicModel.removeReservedNames(json)
         
         if case .object(var v) = modified {
             v["__typename"] = typeName
@@ -119,66 +109,14 @@ struct FlutterSerializedModel: Model, JSONValueHolder {
         }
         return jsonValue(for: key)
     }
-    
-    private func generateSerializedData(modelSchema: ModelSchema) -> [String: Any]{
-        
-        var result = [String: Any]()
-                
-        for(key, value) in values {
-            
-            let field = modelSchema.field(withName: key)
-            
-            if(value == nil){
-                continue
-            }
-            if case .model = field?.type{
-
-                let map = jsonValue(for: key, modelSchema: modelSchema) as! [String: JSONValue]
-                if case .string(let deserializedValue) = map["id"],
-                    case .model(let name) = field!.type
-                    {
-                    result[key] = [
-                        "id": deserializedValue,
-                        "modelName": name,
-                        "serializedData": [
-                            "id": deserializedValue
-                        ]
-                    ]
-                }
-    
-            }
-            else if case .collection = field?.type{
-                continue
-            }
-            else if case .dateTime = field?.type,
-                case .some(.string(let deserializedValue)) = values[key] {
-
-                result[key] = deserializedValue
-            }
-            else{
-                result[key] = jsonValue(for: key, modelSchema: modelSchema)
-            }
-        }
-        
-        return result;
-    }
-    
-    public func toJSON(modelSchema: ModelSchema) -> [String: Any] {
-        return [
-            "id": self.id,
-            "modelName": modelSchema.name,
-            "serializedData": generateSerializedData(modelSchema: modelSchema)
-        ]
-    }
 }
 
+extension DynamicModel {
 
-extension FlutterSerializedModel {
-    
     public enum CodingKeys: String, ModelKey {
         case id
         case values
     }
-    
+
     public static let keys = CodingKeys.self
 }
