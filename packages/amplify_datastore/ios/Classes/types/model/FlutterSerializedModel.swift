@@ -156,29 +156,28 @@ struct FlutterSerializedModel: Model, JSONValueHolder {
                 result[key] = deserializedValue
             }
             else{
-                result[key] = jsonValue(for: key, modelSchema: modelSchema)
+                result[key] = jsonValue(for: key, modelSchema: modelSchema)!
             }
         }
         
         return result;
     }
     
-    public func toJSON(modelSchema: ModelSchema) -> [String: Any] {
+    public func toMap(modelSchema: ModelSchema) -> [String: Any] {
         return [
-            "id": self.id,
+            "id": id,
             "modelName": modelSchema.name,
             "serializedData": generateSerializedData(modelSchema: modelSchema)
         ]
     }
 }
 
-
 extension FlutterSerializedModel {
-    
+
     public enum CodingKeys: String, ModelKey {
         case id
         case values
     }
-    
+
     public static let keys = CodingKeys.self
 }
