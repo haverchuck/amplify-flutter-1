@@ -347,7 +347,6 @@ class DataStorePluginUnitTests: XCTestCase {
         }
         let dataStoreBridge: MockDataStoreBridge = MockDataStoreBridge()
         pluginUnderTest = SwiftAmplifyDataStorePlugin(bridge: dataStoreBridge, flutterModelRegistration: flutterModelSchemaRegistration)
-
         pluginUnderTest.onClear(
             flutterResult: {(result) in
                 XCTAssertNil(result)

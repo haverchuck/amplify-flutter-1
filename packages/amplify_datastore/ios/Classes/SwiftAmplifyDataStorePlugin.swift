@@ -28,17 +28,22 @@ public class SwiftAmplifyDataStorePlugin: NSObject, FlutterPlugin {
     private let dataStoreObserveEventStreamHandler: DataStoreObserveEventStreamHandler?
     init(bridge: DataStoreBridge = DataStoreBridge(),
          flutterModelRegistration: FlutterModels = FlutterModels(),
-         dataStoreObserveEventStreamHandler: DataStoreObserveEventStreamHandler = DataStoreObserveEventStreamHandler()) {
+         dataStoreObserveEventStreamHandler: DataStoreObserveEventStreamHandler = DataStoreObserveEventStreamHandler(),
+         dataStoreHubEventStreamHandler: DataStoreHubEventStreamHandler = DataStoreHubEventStreamHandler()) {
         self.bridge = bridge
         self.flutterModelRegistration = flutterModelRegistration
         self.dataStoreObserveEventStreamHandler = dataStoreObserveEventStreamHandler
+        self.dataStoreHubEventStreamHandler = dataStoreHubEventStreamHandler
     }
 
     public static func register(with registrar: FlutterPluginRegistrar) {
         let instance = SwiftAmplifyDataStorePlugin()
         let channel = FlutterMethodChannel(name: "com.amazonaws.amplify/datastore", binaryMessenger: registrar.messenger())
         let observeChannel = FlutterEventChannel(name: "com.amazonaws.amplify/datastore_observe_events", binaryMessenger: registrar.messenger())
+        let hubChannel = FlutterEventChannel(name: "com.amazonaws.amplify/datastore_hub_events", binaryMessenger: registrar.messenger())
         observeChannel.setStreamHandler(instance.dataStoreObserveEventStreamHandler)
+        hubChannel.setStreamHandler(instance.dataStoreHubEventStreamHandler)
+        
         registrar.addMethodCallDelegate(instance, channel: channel)
     }
 
@@ -280,6 +285,32 @@ public class SwiftAmplifyDataStorePlugin: NSObject, FlutterPlugin {
             flutterResult(false)
         }
     }
+    func onClear(flutterResult: @escaping FlutterResult) {
+        do {
+            try bridge.onClear() {(result) in
+                switch result {
+                case .failure(let error):
+                    print("Clear API failed. Error: \(error)")
+                    FlutterDataStoreErrorHandler.handleDataStoreError(
+                        error: error,
+                        flutterResult: flutterResult,
+                        msg: FlutterDataStoreErrorMessage.CLEAR_FAILED.rawValue
+                    )
+                case .success():
+                    print("Successfully cleared the store")
+                    flutterResult(nil)
+                }
+            }
+        }
+        catch {
+            print("An unexpected error occured: \(error)")
+            flutterResult(FlutterDataStoreErrorHandler.createFlutterError(
+                msg: FlutterDataStoreErrorMessage.UNEXPECTED_ERROR.rawValue,
+                errorMap: ["UNKNOWN": "\(error.localizedDescription).\nAn unexpected error has occurred. See logs for details." ]))
+            return
+        }
+    }
+    
 
     func onClear(flutterResult: @escaping FlutterResult) {
         do {

@@ -17,6 +17,7 @@ library sample_app;
 
 import 'dart:convert';
 
+import 'package:uuid/uuid.dart';
 import 'package:amplify_datastore_example/codegen/ModelProvider.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -76,6 +77,7 @@ class _MyAppState extends State<MyApp> {
       ScrollController(initialScrollOffset: 50.0);
 
   Amplify amplify = new Amplify();
+  AmplifyDataStore datastorePlugin;
 
   @override
   void initState() {
@@ -85,10 +87,15 @@ class _MyAppState extends State<MyApp> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
-    AmplifyDataStore datastorePlugin =
+    datastorePlugin =
         AmplifyDataStore(modelProvider: ModelProvider.instance);
 
     await amplify.addPlugin(dataStorePlugins: [datastorePlugin]);
+
+    datastorePlugin.events.listenToDataStore((msg) {
+      print(msg);
+    });
+
     // Configure
     await amplify.configure(amplifyconfig);
     postStream = Amplify.DataStore.observe(Post.classType);
