@@ -14,5 +14,36 @@
  */
 
 import Foundation
+import Flutter
+import UIKit
+import Amplify
+import AmplifyPlugins
+import AWSCore
+import Combine
 
+public struct FlutterHubElement {
+    
+    var model: [String: Any]
+    var version: Int?
+    var lastChangedAt: Int?
+    var deleted: Bool?
+    
+    init(hubElement: OutboxMutationEvent.OutboxMutationEventElement, schema: ModelSchema) throws {
+        guard let model = hubElement.model as? FlutterSerializedModel else {
+                  throw FlutterDataStoreError.hubEventCast
+              }
+        self.model = model.toMap(modelSchema: schema)
+    }
+    
+    func toValueMap() -> Dictionary<String, Any> {
+        return [
+            "model": self.model,
+            "_version": self.version as Any,
+            "_lastChangedAt": self.lastChangedAt as Any,
+            "_deleted": self.deleted as Any
+            
+        ]
+    }
+    
+}
 

@@ -26,6 +26,7 @@ public class SwiftAmplifyDataStorePlugin: NSObject, FlutterPlugin {
     private let flutterModelRegistration: FlutterModels
     private var observeSubscription: AnyCancellable?
     private let dataStoreObserveEventStreamHandler: DataStoreObserveEventStreamHandler?
+    private let dataStoreHubEventStreamHandler: DataStoreHubEventStreamHandler?
     init(bridge: DataStoreBridge = DataStoreBridge(),
          flutterModelRegistration: FlutterModels = FlutterModels(),
          dataStoreObserveEventStreamHandler: DataStoreObserveEventStreamHandler = DataStoreObserveEventStreamHandler(),
@@ -94,6 +95,8 @@ public class SwiftAmplifyDataStorePlugin: NSObject, FlutterPlugin {
             modelSchemas.forEach { (modelSchema) in
                 flutterModelRegistration.addModelSchema(modelName: modelSchema.name, modelSchema: modelSchema)
             }
+            
+            self.dataStoreHubEventStreamHandler?.registerModelsForHub(flutterModels: flutterModelRegistration)
 
             let dataStorePlugin = AWSDataStorePlugin(modelRegistration: flutterModelRegistration)
             try Amplify.add(plugin: dataStorePlugin)
@@ -285,33 +288,7 @@ public class SwiftAmplifyDataStorePlugin: NSObject, FlutterPlugin {
             flutterResult(false)
         }
     }
-    func onClear(flutterResult: @escaping FlutterResult) {
-        do {
-            try bridge.onClear() {(result) in
-                switch result {
-                case .failure(let error):
-                    print("Clear API failed. Error: \(error)")
-                    FlutterDataStoreErrorHandler.handleDataStoreError(
-                        error: error,
-                        flutterResult: flutterResult,
-                        msg: FlutterDataStoreErrorMessage.CLEAR_FAILED.rawValue
-                    )
-                case .success():
-                    print("Successfully cleared the store")
-                    flutterResult(nil)
-                }
-            }
-        }
-        catch {
-            print("An unexpected error occured: \(error)")
-            flutterResult(FlutterDataStoreErrorHandler.createFlutterError(
-                msg: FlutterDataStoreErrorMessage.UNEXPECTED_ERROR.rawValue,
-                errorMap: ["UNKNOWN": "\(error.localizedDescription).\nAn unexpected error has occurred. See logs for details." ]))
-            return
-        }
-    }
     
-
     func onClear(flutterResult: @escaping FlutterResult) {
         do {
             try bridge.onClear() {(result) in
@@ -349,5 +326,4 @@ public class SwiftAmplifyDataStorePlugin: NSObject, FlutterPlugin {
     func getPlugin() throws -> AWSDataStorePlugin {
         return try Amplify.DataStore.getPlugin(for: "awsDataStorePlugin") as! AWSDataStorePlugin
     }
-
 }

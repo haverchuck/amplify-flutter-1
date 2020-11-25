@@ -15,11 +15,17 @@
 
 import Foundation
 import Amplify
+import AmplifyPlugins
 
 public class DataStoreHubEventStreamHandler: NSObject, FlutterStreamHandler {
 
     private var eventSink: FlutterEventSink?
     private var token: UnsubscribeToken?
+    private var flutterModelRegistration: FlutterModels?
+    
+    public func registerModelsForHub(flutterModels: FlutterModels) {
+        self.flutterModelRegistration = flutterModels
+    }
 
     public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
         self.eventSink = events
@@ -67,6 +73,32 @@ public class DataStoreHubEventStreamHandler: NSObject, FlutterStreamHandler {
                             self.sendEvent(flutterEvent: ready.toValueMap())
                         } catch {
                             self.sendError(description: castingError, eventName: "ready")
+                        }
+                    case HubPayload.EventName.DataStore.outboxMutationEnqueued :
+                        do {
+                            guard let outboxMutationEnqueued = payload.data as? OutboxMutationEvent else {
+                                      throw FlutterDataStoreError.hubEventCast
+                                  }
+                            let modelName = outboxMutationEnqueued.modelName
+                            let schema = try FlutterDataStoreRequestUtils.getModelSchema(modelSchemas: self.flutterModelRegistration?.modelSchemas ?? [:], modelName: modelName)
+
+                            let flutterOutboxMutationEnqueued = try FlutterOutboxMutationEnqueued(outboxMutationEnqueued: outboxMutationEnqueued, eventName: payload.eventName, schema: schema)
+                            self.sendEvent(flutterEvent: flutterOutboxMutationEnqueued.toValueMap())
+                        } catch {
+                            self.sendError(description: castingError, eventName: payload.eventName)
+                        }
+                    case HubPayload.EventName.DataStore.outboxMutationProcessed :
+                        do {
+                            guard let outboxMutationProcessed = payload.data as? OutboxMutationEvent else {
+                                      throw FlutterDataStoreError.hubEventCast
+                                  }
+                            let modelName = outboxMutationProcessed.modelName
+                            let schema = try FlutterDataStoreRequestUtils.getModelSchema(modelSchemas: self.flutterModelRegistration?.modelSchemas ?? [:], modelName: modelName)
+
+                            let flutterOutboxMutationProcessed = try FlutterOutboxMutationProcessed(outboxMutationProcessed: outboxMutationProcessed, eventName: payload.eventName, schema: schema)
+                            self.sendEvent(flutterEvent: flutterOutboxMutationProcessed.toValueMap())
+                        } catch {
+                            self.sendError(description: castingError, eventName: payload.eventName)
                         }
                     default:
                         print("d")

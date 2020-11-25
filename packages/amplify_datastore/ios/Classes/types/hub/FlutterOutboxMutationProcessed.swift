@@ -19,18 +19,18 @@ import AmplifyPlugins
 import AWSCore
 import Combine
 
-struct FlutterOutboxMutationEnqueued: FlutterHubEvent {
+struct FlutterOutboxMutationProcessed: FlutterHubEvent {
     var eventName: String
     var modelName: String
     var element:  FlutterHubElement?
     
-    init(outboxMutationEnqueued: OutboxMutationEvent, eventName: String, schema: ModelSchema) throws {
+    init(outboxMutationProcessed: OutboxMutationEvent, eventName: String, schema: ModelSchema) throws {
 
 
         self.eventName = eventName
-        self.modelName = outboxMutationEnqueued.modelName
+        self.modelName = outboxMutationProcessed.modelName
         do {
-            self.element = try FlutterHubElement(hubElement: outboxMutationEnqueued.element, schema: schema)
+            self.element = try FlutterHubElement(hubElement: outboxMutationProcessed.element, schema: schema)
         } catch {
             throw error
         }
