@@ -21,12 +21,24 @@ import 'package:amplify_storage_plugin_interface/amplify_storage_plugin_interfac
 import 'package:amplify_auth_plugin_interface/amplify_auth_plugin_interface.dart';
 import 'package:amplify_analytics_plugin_interface/analytics_plugin_interface.dart';
 import 'package:amplify_datastore_plugin_interface/amplify_datastore_plugin_interface.dart';
+import 'package:flutter/services.dart';
+import 'package:amplify_hub/amplify_hub.dart';
+
+
+class AmplifyHub {
+  HubChannel Auth;
+
+  set auth(HubChannel channel) => Auth = channel;
+
+}
 
 class Amplify {
   static const AuthCategory Auth = const AuthCategory();
   static const AnalyticsCategory Analytics = const AnalyticsCategory();
   static const StorageCategory Storage = const StorageCategory();
   static const DataStoreCategory DataStore = const DataStoreCategory();
+
+  static AmplifyHub Hub = AmplifyHub();
 
   bool _isConfigured = false;
   var multiPluginWarning =
@@ -41,6 +53,13 @@ class Amplify {
       try {
         if (authPlugins != null && authPlugins.length == 1) {
           Auth.addPlugin(authPlugins[0]);
+          try {
+            Hub.auth = HubChannel(authPlugins[0].streamController, "auth");
+            print('success');
+          } catch(e) {
+            print('Error setting auth hub channel');
+          }
+         
         } else if (authPlugins != null && authPlugins.length > 1) {
           throw (multiPluginWarning);
         }

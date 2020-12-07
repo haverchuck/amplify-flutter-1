@@ -146,7 +146,7 @@ class _MyAppState extends State<MyApp> {
         runQueries();
       }
       print(msg);
-    });
+    }, onError: (){});
     setState(() {
       _listeningToHub = true;
     });

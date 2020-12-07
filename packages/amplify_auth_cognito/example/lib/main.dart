@@ -13,6 +13,9 @@
  * permissions and limitations under the License.
  */
 
+import 'dart:async';
+
+import 'package:amplify_hub/categories_types/auth/SignedInHubEvent.dart';
 import 'package:flutter/material.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_core/amplify_core.dart';
@@ -23,6 +26,9 @@ import 'Widgets/SignInWidget.dart';
 import 'Widgets/SignUpWidget.dart';
 import 'Widgets/UpdatePasswordWidget.dart';
 import 'amplifyconfiguration.dart';
+
+import 'package:amplify_hub/categories_types/HubEvent.dart';
+import 'package:amplify_hub/categories_types/auth/AuthHubEvent.dart';
 
 void main() {
   runApp(MyApp());
@@ -41,6 +47,8 @@ class _MyAppState extends State<MyApp> {
   final confirmationCodeController = TextEditingController();
   final oldPasswordController = TextEditingController();
   final newPasswordController = TextEditingController();
+  StreamSubscription hub1;
+  StreamSubscription hub2;
 
   bool _isAmplifyConfigured = false;
   Amplify amplify = Amplify();
@@ -105,39 +113,70 @@ class _MyAppState extends State<MyApp> {
       displayState = isSignedIn ? "SIGNED_IN" : "SHOW_SIGN_IN";
       authState = isSignedIn ? "User already signed in" : "User not signed in";
     });
-    auth.events.listenToAuth((hubEvent) {
-      switch(hubEvent["eventName"]) {
-        case "SIGNED_IN": {
-          setState(() {
-            hubEvent = "SIGNED_IN";
-          });
-          print("HUB: USER IS SIGNED IN");
-        }
-        break;
-        case "SIGNED_OUT": {
-          setState(() {
-            hubEvent = "SIGNED_OUT";
-          });
-          print("HUB: USER IS SIGNED OUT");
-        }
-        break;
-        case "SESSION_EXPIRED": {
-          setState(() {
-            hubEvent = "SESSION_EXPIRED";
-          });
-          print("HUB: USER SESSION HAS EXPIRED");
-        }
-        break;
-        default: {
-          print("CONFIGURATION EVENT");
-        }
-      }
-    });
+
+
+
+    // auth.events.listenToAuth((hubEvent) {
+    //   switch(hubEvent["eventName"]) {
+    //     case "SIGNED_IN": {
+    //       setState(() {
+    //         hubEvent = "SIGNED_IN";
+    //       });
+    //       print("HUB: USER IS SIGNED IN");
+    //     }
+    //     break;
+    //     case "SIGNED_OUT": {
+    //       setState(() {
+    //         hubEvent = "SIGNED_OUT";
+    //       });
+    //       print("HUB: USER IS SIGNED OUT");
+    //     }
+    //     break;
+    //     case "SESSION_EXPIRED": {
+    //       setState(() {
+    //         hubEvent = "SESSION_EXPIRED";
+    //       });
+    //       print("HUB: USER SESSION HAS EXPIRED");
+    //     }
+    //     break;
+    //     default: {
+    //       print("CONFIGURATION EVENT");
+    //     }
+    //   }
+    // });
   }
 
   Future<bool> _isSignedIn() async {
     final session = await Amplify.Auth.fetchAuthSession();
     return session.isSignedIn;
+  }
+
+  void listener(msg) {
+    print("Hub 1");
+  }
+
+  void createHub1() {
+    setState(() {
+      hub1 = Amplify.Hub.Auth.listen(listener);
+    });
+    print(hub1);
+  }
+
+  void createHub2() {
+    setState(() {
+      hub2 = Amplify.Hub.Auth.listen(listener);
+    });
+    print(hub2);
+  }
+
+  void cancelHub1() {
+    hub1.cancel();
+    print(hub1);
+  }
+
+  void cancelHub2() {
+    hub2.cancel();
+    print(hub2);
   }
 
   void _signOut() async {
@@ -179,9 +218,9 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  void _stopListening() async {
-    auth.events.stopListeningToAuth();
-  }
+  // void _stopListening() async {
+  //   auth.events.stopListeningToAuth();
+  // }
 
   void _showCreateUser() async {
     changeDisplay("SHOW_SIGN_UP");
@@ -219,10 +258,10 @@ class _MyAppState extends State<MyApp> {
                 child: const Text('Change Password'),
               ),
               const Padding(padding: EdgeInsets.all(10.0)),
-              RaisedButton(
-                onPressed: _stopListening,
-                child: const Text('Stop Listening'),
-              ),
+              // RaisedButton(
+              //   onPressed: _stopListening,
+              //   child: const Text('Stop Listening'),
+              // ),
               const Padding(padding: EdgeInsets.all(10.0)),
               RaisedButton(
                 onPressed: _fetchSession,
@@ -312,6 +351,22 @@ class _MyAppState extends State<MyApp> {
                   if (this.displayState == "SHOW_CONFIRM_RESET") ConfirmResetWidget(showResult, changeDisplay, setError, _backToSignIn),
                   if (this.displayState == "SIGNED_IN") showApp(),
                   if (this.error != "") showErrors(),
+                  RaisedButton(
+                    onPressed: createHub1,
+                    child: Text('Create Hub1')
+                  ),
+                  RaisedButton(
+                      onPressed: createHub2,
+                      child: Text('Create Hub2')
+                  ),
+                  RaisedButton(
+                      onPressed: cancelHub1,
+                      child: Text('Cancel Hub1')
+                  ),
+                  RaisedButton(
+                      onPressed: cancelHub2,
+                      child: Text('Cancel Hub1')
+                  ),
                   RaisedButton(
                     key: Key('configure-button'),
                     onPressed: _isAmplifyConfigured ? null: _configureAmplify,

@@ -18,13 +18,21 @@ import 'dart:core';
 import 'package:amplify_auth_plugin_interface/amplify_auth_plugin_interface.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import './method_channel_auth_cognito.dart';
 import './event_channel_auth_cognito.dart';
 
+import './amplify_auth_stream_controller.dart';
+
+import 'package:amplify_hub/categories_types/auth/AuthHubEvent.dart';
+import 'package:amplify_hub/categories_types/HubEvent.dart';
+
 
 export './src/types.dart';
 export 'package:amplify_auth_plugin_interface/src/types.dart';
+
+// typedef Listener = void Function(HubEvent msg);
 
 class AmplifyAuthCognito extends AuthPluginInterface {
 
@@ -34,7 +42,15 @@ class AmplifyAuthCognito extends AuthPluginInterface {
   AmplifyAuthCognito() : super(token: _token);
 
   static AmplifyAuthCognito _instance = AmplifyAuthCognitoMethodChannel();
-  var events = AmplifyAuthCognitoEventChannel();
+
+  static StreamController stream = authStreamController;
+
+  StreamController get streamController {
+      return stream;
+  }
+
+  // var events = AmplifyAuthCognitoEventChannel();
+  // var events = const EventChannel("com.amazonaws.amplify/auth_cognito_events");
 
   static set instance(AuthPluginInterface instance) {
     PlatformInterface.verifyToken(instance, _token);

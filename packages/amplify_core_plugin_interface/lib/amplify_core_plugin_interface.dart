@@ -60,6 +60,8 @@ abstract class Core extends PlatformInterface {
   final AnalyticsCategory Analytics = AnalyticsCategory();
   final StorageCategory Storage = StorageCategory();
   final DataStoreCategory DataStore = DataStoreCategory();
+  
+  Map<String, StreamController> hub;
 
   /// Adds the configuration and return true if it was successful.
   Future<bool> configure(String version, String configuration) {

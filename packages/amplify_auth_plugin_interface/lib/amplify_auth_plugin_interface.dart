@@ -17,6 +17,7 @@ library amplify_auth_plugin_interface;
 
 import 'dart:async';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'src/types.dart';
@@ -25,6 +26,10 @@ export 'src/types.dart';
 abstract class AuthPluginInterface extends PlatformInterface {
   /// Constructs a AmplifyPlatform.
   AuthPluginInterface({@required Object token}) : super(token: token);
+
+  StreamController get streamController {
+     throw UnimplementedError('streamController getter has not been implemented.');
+  }
 
   /// Adds the configuration and return true if it was successful.
   bool addPlugin(AuthPluginInterface configuration) {
