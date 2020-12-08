@@ -15,7 +15,7 @@
 
 import 'dart:async';
 
-import 'package:amplify_hub/categories_types/auth/SignedInHubEvent.dart';
+
 import 'package:flutter/material.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_core/amplify_core.dart';
@@ -27,8 +27,7 @@ import 'Widgets/SignUpWidget.dart';
 import 'Widgets/UpdatePasswordWidget.dart';
 import 'amplifyconfiguration.dart';
 
-import 'package:amplify_hub/categories_types/HubEvent.dart';
-import 'package:amplify_hub/categories_types/auth/AuthHubEvent.dart';
+import 'package:amplify_core/amplify_hub.dart';
 
 void main() {
   runApp(MyApp());
@@ -47,8 +46,8 @@ class _MyAppState extends State<MyApp> {
   final confirmationCodeController = TextEditingController();
   final oldPasswordController = TextEditingController();
   final newPasswordController = TextEditingController();
-  StreamSubscription hub1;
-  StreamSubscription hub2;
+  AmplifyHub hub1;
+  AmplifyHub hub2;
 
   bool _isAmplifyConfigured = false;
   Amplify amplify = Amplify();
@@ -157,14 +156,16 @@ class _MyAppState extends State<MyApp> {
 
   void createHub1() {
     setState(() {
-      hub1 = Amplify.Hub.Auth.listen(listener);
+      hub1 = amplify.Hub(['auth']);
+      hub1.listen(listener);
     });
     print(hub1);
   }
 
   void createHub2() {
     setState(() {
-      hub2 = Amplify.Hub.Auth.listen(listener);
+      hub2 = amplify.Hub(['auth']);
+      hub2.listen(listener);
     });
     print(hub2);
   }
@@ -365,7 +366,7 @@ class _MyAppState extends State<MyApp> {
                   ),
                   RaisedButton(
                       onPressed: cancelHub2,
-                      child: Text('Cancel Hub1')
+                      child: Text('Cancel Hub2')
                   ),
                   RaisedButton(
                     key: Key('configure-button'),

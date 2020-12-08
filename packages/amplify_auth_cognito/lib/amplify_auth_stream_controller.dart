@@ -40,7 +40,7 @@ onListen() {
 }
 
 onCancel() {
-  if (authStreamController.hasListener) {
+  if (!authStreamController.hasListener) {
     eventStream.cancel();
   }
 }

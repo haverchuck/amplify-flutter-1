@@ -24,13 +24,7 @@ import 'package:amplify_datastore_plugin_interface/amplify_datastore_plugin_inte
 import 'package:flutter/services.dart';
 import 'package:amplify_hub/amplify_hub.dart';
 
-
-class AmplifyHub {
-  HubChannel Auth;
-
-  set auth(HubChannel channel) => Auth = channel;
-
-}
+import 'amplify_hub.dart';
 
 class Amplify {
   static const AuthCategory Auth = const AuthCategory();
@@ -38,7 +32,7 @@ class Amplify {
   static const StorageCategory Storage = const StorageCategory();
   static const DataStoreCategory DataStore = const DataStoreCategory();
 
-  static AmplifyHub Hub = AmplifyHub();
+  Map<String, StreamController> channelMap = {};
 
   bool _isConfigured = false;
   var multiPluginWarning =
@@ -54,7 +48,7 @@ class Amplify {
         if (authPlugins != null && authPlugins.length == 1) {
           Auth.addPlugin(authPlugins[0]);
           try {
-            Hub.auth = HubChannel(authPlugins[0].streamController, "auth");
+            channelMap["auth"] = authPlugins[0].streamController;
             print('success');
           } catch(e) {
             print('Error setting auth hub channel');
@@ -90,6 +84,14 @@ class Amplify {
 
   String _getVersion() {
     return "0.1.0";
+  }
+
+   AmplifyHub Hub(List<String> categories) {
+    AmplifyHub instance = AmplifyHub();
+    categories.forEach((el) {
+      instance.addChannel(channelMap[el]);
+    });
+    return instance;
   }
 
   Future<void> configure(String configuration) async {
