@@ -42,3 +42,9 @@ export 'CognitoSession/CognitoSessionOptions.dart';
 
 // Exceptions
 export 'CognitoExceptions/CognitoExceptions.dart';
+
+// Hub Events
+export 'CognitoHubEvents/AuthHubEvent.dart';
+export 'CognitoHubEvents/SessionExpiredHubEvent.dart';
+export 'CognitoHubEvents/SignedInHubEvent.dart';
+export 'CognitoHubEvents/SignedOutHubEvent.dart';

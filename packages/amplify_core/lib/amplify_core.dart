@@ -22,7 +22,6 @@ import 'package:amplify_auth_plugin_interface/amplify_auth_plugin_interface.dart
 import 'package:amplify_analytics_plugin_interface/analytics_plugin_interface.dart';
 import 'package:amplify_datastore_plugin_interface/amplify_datastore_plugin_interface.dart';
 import 'package:flutter/services.dart';
-import 'package:amplify_hub/amplify_hub.dart';
 
 import 'amplify_hub.dart';
 
@@ -47,13 +46,7 @@ class Amplify {
       try {
         if (authPlugins != null && authPlugins.length == 1) {
           Auth.addPlugin(authPlugins[0]);
-          try {
-            channelMap["auth"] = authPlugins[0].streamController;
-            print('success');
-          } catch(e) {
-            print('Error setting auth hub channel');
-          }
-         
+          channelMap["auth"] = authPlugins[0].streamController;
         } else if (authPlugins != null && authPlugins.length > 1) {
           throw (multiPluginWarning);
         }
@@ -69,6 +62,7 @@ class Amplify {
         }
         if (dataStorePlugins != null && dataStorePlugins.length == 1) {
           await DataStore.addPlugin(dataStorePlugins[0]);
+          channelMap["datastore"] = dataStorePlugins[0].streamController;
         } else if (dataStorePlugins != null && dataStorePlugins.length > 1) {
           throw (multiPluginWarning);
         }
@@ -86,7 +80,7 @@ class Amplify {
     return "0.1.0";
   }
 
-   AmplifyHub Hub(List<String> categories) {
+  AmplifyHub Hub(List<String> categories) {
     AmplifyHub instance = AmplifyHub();
     categories.forEach((el) {
       instance.addChannel(channelMap[el]);

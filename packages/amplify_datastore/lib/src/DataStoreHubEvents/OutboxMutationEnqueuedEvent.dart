@@ -13,14 +13,18 @@
  * permissions and limitations under the License.
  */
 
-import 'package:amplify_datastore_plugin_interface/src/types/models/model.dart';
+import 'package:amplify_datastore/src/DataStoreHubEvents/DataStoreHubEvent.dart';
+import 'package:amplify_datastore_plugin_interface/amplify_datastore_plugin_interface.dart';
+import 'dart:convert';
 
-import 'model_schema.dart';
+import 'HubEventElement.dart';
 
-abstract class ModelProviderInterface {
-  String version;
+class OutboxMutationEnqueuedEvent extends DataStoreHubEvent {
+  HubEventElement element;
+  String modelName;
 
-  List<ModelSchema> modelSchemas;
-
-  Model fetchSerializedType(String modelName, Map<dynamic, dynamic> serializedData) {}
+  OutboxMutationEnqueuedEvent(Map<dynamic, dynamic> serializedData, ModelProviderInterface provider) {
+    element = HubEventElement(serializedData, provider);
+    modelName = serializedData["modelName"] as String;
+  }
 }

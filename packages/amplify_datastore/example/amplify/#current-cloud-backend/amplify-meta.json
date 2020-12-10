@@ -1,18 +1,18 @@
 {
   "providers": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-hubbug-dev-181425-authRole",
-      "UnauthRoleArn": "arn:aws:iam::444407295970:role/amplify-hubbug-dev-181425-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::444407295970:role/amplify-hubbug-dev-181425-authRole",
+      "AuthRoleName": "amplify-example-dev-103648-authRole",
+      "UnauthRoleArn": "arn:aws:iam::444407295970:role/amplify-example-dev-103648-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::444407295970:role/amplify-example-dev-103648-authRole",
       "Region": "us-west-2",
-      "DeploymentBucketName": "amplify-hubbug-dev-181425-deployment",
-      "UnauthRoleName": "amplify-hubbug-dev-181425-unauthRole",
-      "StackName": "amplify-hubbug-dev-181425",
-      "StackId": "arn:aws:cloudformation:us-west-2:444407295970:stack/amplify-hubbug-dev-181425/1c76cba0-3444-11eb-9003-02f5117d25a9"
+      "DeploymentBucketName": "amplify-example-dev-103648-deployment",
+      "UnauthRoleName": "amplify-example-dev-103648-unauthRole",
+      "StackName": "amplify-example-dev-103648",
+      "StackId": "arn:aws:cloudformation:us-west-2:444407295970:stack/amplify-example-dev-103648/83177ee0-3a4d-11eb-8256-063753de3fbb"
     }
   },
   "api": {
-    "hubbug": {
+    "example": {
       "service": "AppSync",
       "providerPlugin": "awscloudformation",
       "output": {
@@ -21,59 +21,21 @@
             "authenticationType": "API_KEY",
             "apiKeyConfig": {
               "apiKeyExpirationDays": 7,
-              "description": "jj"
+              "description": ""
             }
           },
           "additionalAuthenticationProviders": []
         },
-        "GraphQLAPIIdOutput": "lurdovyxyndongkf42toqxj6xa",
-        "GraphQLAPIEndpointOutput": "https://gpue5difbrex5gigxuzzqqwj5e.appsync-api.us-west-2.amazonaws.com/graphql",
-        "GraphQLAPIKeyOutput": "da2-3667op5tdnhclaise3ql7y2bhm"
+        "GraphQLAPIIdOutput": "buktl62h2bhnbmk5zdunllbhqy",
+        "GraphQLAPIEndpointOutput": "https://kpzdy5khjnfanaaafvmzf6t4mi.appsync-api.us-west-2.amazonaws.com/graphql",
+        "GraphQLAPIKeyOutput": "da2-s4t37yhxzvbd5nfzku6nh6t5n4"
       },
-      "lastPushTimeStamp": "2020-12-02T20:51:14.236Z",
+      "lastPushTimeStamp": "2020-12-09T18:42:30.086Z",
       "providerMetadata": {
-        "s3TemplateURL": "https://s3.amazonaws.com/amplify-hubbug-dev-181425-deployment/amplify-cfn-templates/api/cloudformation-template.json",
-        "logicalId": "apihubbug"
-      }
-    }
-  },
-  "auth": {
-    "hubbug0f51db28": {
-      "service": "Cognito",
-      "providerPlugin": "awscloudformation",
-      "dependsOn": [],
-      "customAuth": false,
-      "output": {
-        "AppClientSecret": "eddp6sr20k2i76438ic0udo6rmc6e98lk932g08087hgir9f0gi",
-        "UserPoolId": "us-west-2_TM33bzebU",
-        "AppClientIDWeb": "5go6bvk861o1ar733g2va39k8v",
-        "AppClientID": "76lk67lf53aeqr4hnedresesrj",
-        "IdentityPoolId": "us-west-2:7dcd6d44-bcf0-40c5-a0d2-2cec2759c2e0",
-        "IdentityPoolName": "hubbug0f51db28_identitypool_0f51db28__dev",
-        "UserPoolName": "hubbug0f51db28_userpool_0f51db28"
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-example-dev-103648-deployment/amplify-cfn-templates/api/cloudformation-template.json",
+        "logicalId": "apiexample"
       },
-      "lastPushTimeStamp": "2020-12-02T20:51:25.059Z",
-      "providerMetadata": {
-        "s3TemplateURL": "https://s3.amazonaws.com/amplify-hubbug-dev-181425-deployment/amplify-cfn-templates/auth/hubbug0f51db28-cloudformation-template.yml",
-        "logicalId": "authhubbug0f51db28"
-      },
-      "lastPushDirHash": "lWNidoN48j0F+2mlBAnFRlXIRGM="
-    }
-  },
-  "storage": {
-    "s310c94eea": {
-      "service": "S3",
-      "providerPlugin": "awscloudformation",
-      "providerMetadata": {
-        "s3TemplateURL": "https://s3.amazonaws.com/amplify-hubbug-dev-181425-deployment/amplify-cfn-templates/storage/s3-cloudformation-template.json",
-        "logicalId": "storages310c94eea"
-      },
-      "lastPushTimeStamp": "2020-12-02T20:51:25.059Z",
-      "output": {
-        "BucketName": "hubbugfef9bb39ccd045a0874e9b5eb37c1f3d181425-dev",
-        "Region": "us-west-2"
-      },
-      "lastPushDirHash": "jfbNVg2TYv6FfN+aUdOESDOFE78="
+      "lastPushDirHash": "Z2PaSyKNI+lCsLPwIFnrexQdi7U="
     }
   }
 }

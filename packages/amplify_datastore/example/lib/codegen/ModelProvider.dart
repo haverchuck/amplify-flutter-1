@@ -31,4 +31,15 @@ class ModelProvider implements ModelProviderInterface {
   static final ModelProvider _instance = ModelProvider();
 
   static ModelProvider get instance => _instance;
+
+  Model fetchSerializedType(String modelName, Map<dynamic, dynamic> serializedData) {
+    Model m;
+    switch(modelName) {
+      case "Blog": {
+        m =  Blog.fromJson(serializedData);
+      }
+      break;
+    }
+    return m;
+  }
 }

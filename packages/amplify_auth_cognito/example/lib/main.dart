@@ -48,6 +48,8 @@ class _MyAppState extends State<MyApp> {
   final newPasswordController = TextEditingController();
   AmplifyHub hub1;
   AmplifyHub hub2;
+  StreamSubscription sub1;
+  StreamSubscription sub2;
 
   bool _isAmplifyConfigured = false;
   Amplify amplify = Amplify();
@@ -155,28 +157,35 @@ class _MyAppState extends State<MyApp> {
   }
 
   void createHub1() {
-    setState(() {
-      hub1 = amplify.Hub(['auth']);
-      hub1.listen(listener);
-    });
-    print(hub1);
+    if (hub1 == null) {
+      setState(() {
+        hub1 = amplify.Hub(['auth']);
+      });
+      print(hub1);
+    }
+  }
+  
+  void createSubscription1(){
+    hub1.listen(listener);
   }
 
   void createHub2() {
-    setState(() {
-      hub2 = amplify.Hub(['auth']);
-      hub2.listen(listener);
-    });
-    print(hub2);
+    if (hub2 == null) {
+      setState(() {
+        hub2 = amplify.Hub(['auth']);
+        sub2 = hub2.listen(listener);
+      });
+      print(hub2);
+    }
   }
 
   void cancelHub1() {
-    hub1.cancel();
+    sub1.cancel();
     print(hub1);
   }
 
   void cancelHub2() {
-    hub2.cancel();
+    sub2.cancel();
     print(hub2);
   }
 
@@ -355,6 +364,10 @@ class _MyAppState extends State<MyApp> {
                   RaisedButton(
                     onPressed: createHub1,
                     child: Text('Create Hub1')
+                  ),
+                  RaisedButton(
+                      onPressed: createSubscription1,
+                      child: Text('Create Sub1')
                   ),
                   RaisedButton(
                       onPressed: createHub2,

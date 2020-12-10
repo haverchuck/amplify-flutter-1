@@ -1,9 +1,10 @@
 import 'dart:async';
 
+
 class AmplifyHub {
 
   StreamSubscription subscription;
-  List<StreamController> platformStreams = [];
+  List<StreamSubscription> platformStreams = [];
   StreamController hub;
 
   AmplifyHub() {
@@ -12,28 +13,24 @@ class AmplifyHub {
       onCancel: cancelPlatformStreams);
   }
 
+  listened() {}
+
   cancelPlatformStreams() {
-    platformStreams.forEach((element) {
-      element.close();
+    platformStreams.forEach((el) {
+      el.cancel();
     });
   }
 
-  listened() {
-    print('listened');
-  }
 
-
-  StreamSubscription listen(dynamic listener) {
-    subscription = hub.stream.listen(listener);
+  StreamSubscription listen(dynamic listener, {dynamic onError}) {
+    subscription = hub.stream.listen(listener, onError: onError);
     return subscription;
   }
 
-  void cancel() {
-    subscription.cancel();
-  }
-
   void addChannel(StreamController sc) async  {
-    hub.addStream(sc.stream);
-    platformStreams.add(sc);
+    StreamSubscription subscription = sc.stream.listen((msg) {
+      hub.add(msg);
+    });
+    platformStreams.add(subscription);
   }
 }

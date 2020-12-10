@@ -25,10 +25,6 @@ import './event_channel_auth_cognito.dart';
 
 import './amplify_auth_stream_controller.dart';
 
-import 'package:amplify_hub/categories_types/auth/AuthHubEvent.dart';
-import 'package:amplify_hub/categories_types/HubEvent.dart';
-
-
 export './src/types.dart';
 export 'package:amplify_auth_plugin_interface/src/types.dart';
 

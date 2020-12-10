@@ -13,14 +13,11 @@
  * permissions and limitations under the License.
  */
 
-import 'package:amplify_datastore_plugin_interface/src/types/models/model.dart';
+import 'package:amplify_datastore/src/DataStoreHubEvents/DataStoreHubEvent.dart';
 
-import 'model_schema.dart';
-
-abstract class ModelProviderInterface {
-  String version;
-
-  List<ModelSchema> modelSchemas;
-
-  Model fetchSerializedType(String modelName, Map<dynamic, dynamic> serializedData) {}
+class NetworkStatusEvent extends DataStoreHubEvent {
+  String active;
+  NetworkStatusEvent(Map<String, dynamic> serializedData) {
+    active = serializedData["active"];
+  }
 }

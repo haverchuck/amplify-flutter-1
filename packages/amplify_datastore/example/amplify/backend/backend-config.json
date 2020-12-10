@@ -1,6 +1,6 @@
 {
   "api": {
-    "hubbug": {
+    "example": {
       "service": "AppSync",
       "providerPlugin": "awscloudformation",
       "output": {
@@ -9,26 +9,12 @@
             "authenticationType": "API_KEY",
             "apiKeyConfig": {
               "apiKeyExpirationDays": 7,
-              "description": "jj"
+              "description": ""
             }
           },
           "additionalAuthenticationProviders": []
         }
       }
-    }
-  },
-  "auth": {
-    "hubbug0f51db28": {
-      "service": "Cognito",
-      "providerPlugin": "awscloudformation",
-      "dependsOn": [],
-      "customAuth": false
-    }
-  },
-  "storage": {
-    "s310c94eea": {
-      "service": "S3",
-      "providerPlugin": "awscloudformation"
     }
   }
 }

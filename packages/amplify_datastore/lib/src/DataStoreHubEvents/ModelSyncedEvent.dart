@@ -13,14 +13,21 @@
  * permissions and limitations under the License.
  */
 
-import 'package:amplify_datastore_plugin_interface/src/types/models/model.dart';
+import 'package:amplify_datastore/src/DataStoreHubEvents/DataStoreHubEvent.dart';
 
-import 'model_schema.dart';
-
-abstract class ModelProviderInterface {
-  String version;
-
-  List<ModelSchema> modelSchemas;
-
-  Model fetchSerializedType(String modelName, Map<dynamic, dynamic> serializedData) {}
+class ModelSyncedEvent extends DataStoreHubEvent {
+  String modelName;
+  bool isFullSync;
+  bool isDeltaSync;
+  int added;
+  int updated;
+  int deleted;
+  ModelSyncedEvent(Map<String, dynamic> serializedData) {
+    modelName = serializedData["modelName"];
+    isFullSync = serializedData["isFullSync"];
+    isDeltaSync = serializedData["isDeltaSync"];
+    added = serializedData["added"];
+    updated = serializedData["updated"];
+    deleted = serializedData["deleted"];
+  }
 }
