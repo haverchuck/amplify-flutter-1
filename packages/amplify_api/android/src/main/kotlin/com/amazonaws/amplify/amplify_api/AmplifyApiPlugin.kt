@@ -25,29 +25,43 @@ import com.amazonaws.amplify.amplify_api.types.FlutterApiErrorMessage
 import com.amplifyframework.api.ApiException
 import com.amplifyframework.api.aws.AWSApiPlugin
 import com.amplifyframework.api.aws.GsonVariablesSerializer
+import com.amplifyframework.api.graphql.GraphQLOperation
 import com.amplifyframework.api.graphql.SimpleGraphQLRequest
 import com.amplifyframework.core.Amplify
 import io.flutter.embedding.engine.plugins.FlutterPlugin
-import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
+import io.flutter.plugin.common.EventChannel
+import java.security.InvalidParameterException
+import java.util.*
+import kotlin.collections.HashMap
 
 
 /** AmplifyApiPlugin */
-class AmplifyApiPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
+class AmplifyApiPlugin : FlutterPlugin, MethodCallHandler {
 
   private lateinit var channel: MethodChannel
+  private lateinit var eventchannel: EventChannel
   private lateinit var context: Context
   private var mainActivity: Activity? = null
   private val handler = Handler(Looper.getMainLooper())
+  private val subscriptions: MutableMap<String, GraphQLOperation<String>?>
+  private val graphqlSubscriptionStreamHandler: GraphQLSubscriptionStreamHandler
   private val LOG = Amplify.Logging.forNamespace("amplify:flutter:api")
+
+  constructor() {
+    subscriptions = HashMap()
+    graphqlSubscriptionStreamHandler = GraphQLSubscriptionStreamHandler()
+  }
 
   override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     channel = MethodChannel(flutterPluginBinding.binaryMessenger, "com.amazonaws.amplify/api")
     channel.setMethodCallHandler(this)
+    eventchannel = EventChannel(flutterPluginBinding.binaryMessenger, "com.amazonaws.amplify/api_observe_events")
+    eventchannel.setStreamHandler(graphqlSubscriptionStreamHandler)
     context = flutterPluginBinding.applicationContext
     Amplify.addPlugin(AWSApiPlugin())
     LOG.info("Initiated API plugin")
@@ -59,6 +73,10 @@ class AmplifyApiPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
         query(result, call.arguments as Map<String, Any>)
       "mutate" ->
         mutate(result, call.arguments as Map<String, Any>)
+      "subscribe" ->
+        onSubscribe(result, call.arguments as Map<String, Any>)
+      "cancelSubscription" ->
+        onCancelSubscription(result, call.arguments as Map<String, Any>)
       else -> result.notImplemented()
     }
   }
@@ -156,6 +174,88 @@ class AmplifyApiPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
     )
   }
 
+  fun onSubscribe(flutterResult: Result, request: Map<String, Any>) {
+    var id: String = UUID.randomUUID().toString()
+    var document: String
+    var variables: Map<String, Any>
+
+    try {
+      document = request["document"] as String
+      variables = request["variables"] as Map<String, Any>
+    } catch (e: ClassCastException) {
+      createFlutterError(
+              flutterResult,
+              FlutterApiErrorMessage.ERROR_CASTING_INPUT_IN_PLATFORM_CODE.toString(),
+              createErrorMap(e))
+      return
+    } catch (e: Exception) {
+      createFlutterError(
+              flutterResult,
+              FlutterApiErrorMessage.AMPLIFY_REQUEST_MALFORMED.toString(),
+              createErrorMap(e))
+      return
+    }
+
+    var operation: GraphQLOperation<String>? = Amplify.API.subscribe(
+            SimpleGraphQLRequest<String>(
+                    document,
+                    variables,
+                    String::class.java,
+                    GsonVariablesSerializer()
+            ),
+            {LOG.info("Subscription established: $it");
+              handler.post { flutterResult.success(id) }
+            },
+            {
+              graphqlSubscriptionStreamHandler.sendEvent(it.data, it.errors, id)
+            },
+            {
+              this.subscriptions.remove(id)
+              createFlutterError(
+                      flutterResult,
+                      FlutterApiErrorMessage.AMPLIFY_API_SUBSCRIBE_FAILED_TO_CONNECT.toString(),
+                      createErrorMap(it))
+            },
+            {
+              this.subscriptions.remove(id)
+            }
+    )
+
+    subscriptions[id] = operation
+  }
+
+  fun onCancelSubscription(flutterResult: Result, request: Map<String, Any>) {
+    var id: String
+
+    try {
+      id = request["id"] as String
+    } catch (e: ClassCastException) {
+      createFlutterError(
+              flutterResult,
+              FlutterApiErrorMessage.ERROR_CASTING_INPUT_IN_PLATFORM_CODE.toString(),
+              createErrorMap(e))
+      return
+    } catch (e: Exception) {
+      createFlutterError(
+              flutterResult,
+              FlutterApiErrorMessage.AMPLIFY_REQUEST_MALFORMED.toString(),
+              createErrorMap(e))
+      return
+    }
+
+    if(subscriptions.containsKey(id)) {
+      subscriptions.get(id)?.cancel()
+      subscriptions.remove(id)
+      LOG.info("Subscription cancelled")
+      flutterResult.success(true)
+    } else {
+      createFlutterError(
+              flutterResult,
+              FlutterApiErrorMessage.AMPLIFY_API_SUBSCRIPTION_DOES_NOT_EXIST.toString(),
+              createErrorMap(InvalidParameterException()))
+    }
+  }
+
   private fun createErrorMap(@NonNull error: Exception): Map<String, Any> {
     var errorMap = HashMap<String, Any>()
 
@@ -178,22 +278,6 @@ class AmplifyApiPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
 
   private fun createFlutterError(flutterResult: Result, msg: String, errorMap: Map<String, Any>) {
     handler.post { flutterResult.error("AmplifyException", msg, errorMap) }
-  }
-
-  override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-    this.mainActivity = binding.activity
-  }
-
-  override fun onDetachedFromActivity() {
-    this.mainActivity = null
-  }
-
-  override fun onDetachedFromActivityForConfigChanges() {
-    onDetachedFromActivity()
-  }
-
-  override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
-    onAttachedToActivity(binding)
   }
 
   override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {

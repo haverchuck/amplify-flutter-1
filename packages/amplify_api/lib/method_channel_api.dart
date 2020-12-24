@@ -22,6 +22,8 @@ import 'amplify_api.dart';
 const MethodChannel _channel = MethodChannel('com.amazonaws.amplify/api');
 
 class AmplifyAPIMethodChannel extends AmplifyAPI {
+  var _allSubscriptionsStream = null;
+
   @override
   GraphQLOperation<T> query<T>({@required GraphQLRequest<T> request}) {
     Future<GraphQLResponse<T>> response =
@@ -45,7 +47,7 @@ class AmplifyAPIMethodChannel extends AmplifyAPI {
   }
 
   Future<GraphQLResponse<T>> _getMethodChannelResponse<T>({
-    @required methodName,
+    @required String methodName,
     @required GraphQLRequest<T> request,
   }) async {
     try {
@@ -63,6 +65,49 @@ class AmplifyAPIMethodChannel extends AmplifyAPI {
       return response;
     } on PlatformException catch (e) {
       print('In catch for getMethodChannelResponse');
+      throw _formatError(e);
+    }
+  }
+
+  Future<void> _cancelSubscription({@required String id}) async {
+    try {
+      await _channel.invokeMethod('cancelSubscription', {'id': id});
+      print("Cancel subscription succeeded");
+    } on PlatformException catch (e) {
+      print('Cancel Subscrption failed');
+      throw _formatError(e);
+    }
+  }
+
+  @override
+  Future<GraphQLSubscriptionOperation<T>> subscribe<T>(
+      {@required GraphQLRequest<T> request}) async {
+    const _eventChannel =
+        EventChannel('com.amazonaws.amplify/api_observe_events');
+    _allSubscriptionsStream =
+        _allSubscriptionsStream ?? _eventChannel.receiveBroadcastStream(0);
+
+    try {
+      final String subscriptionId = await _channel.invokeMethod<String>(
+        'subscribe',
+        request.serializeAsMap(),
+      );
+
+      Stream<Map<String, dynamic>> filteredStream = _allSubscriptionsStream
+          .where((event) {
+            return event["id"] == subscriptionId;
+          })
+          .map((event) => {"data": event["data"], "errors": event["errors"]})
+          .asBroadcastStream()
+          .cast<Map<String, dynamic>>();
+
+      Function cancel = () {
+        _cancelSubscription(id: subscriptionId);
+      };
+
+      return GraphQLSubscriptionOperation(
+          cancel: cancel, stream: filteredStream);
+    } on PlatformException catch (e) {
       throw _formatError(e);
     }
   }

@@ -13,13 +13,21 @@
  * permissions and limitations under the License.
  */
 
-package com.amazonaws.amplify.amplify_api.types;
+import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart';
 
-enum class FlutterApiErrorMessage {
-    ERROR_CASTING_INPUT_IN_PLATFORM_CODE,
-    AMPLIFY_REQUEST_MALFORMED,
-    AMPLIFY_API_QUERY_FAILED,
-    AMPLIFY_API_MUTATE_FAILED,
-    AMPLIFY_API_SUBSCRIBE_FAILED_TO_CONNECT,
-    AMPLIFY_API_SUBSCRIPTION_DOES_NOT_EXIST
+const MethodChannel _channel = MethodChannel('com.amazonaws.amplify/api');
+
+class GraphQLSubscriptionOperation<T> {
+  Function _cancel;
+  final Stream<Map<String, dynamic>> stream;
+
+  GraphQLSubscriptionOperation(
+      {@required this.stream, @required Function cancel}) {
+    _cancel = cancel;
+  }
+
+  void cancel() {
+    _cancel();
+  }
 }

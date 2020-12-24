@@ -30,6 +30,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _result = '';
+  Function _unsubscribe;
   bool _isAmplifyConfigured = false;
   Amplify amplify = new Amplify();
 
@@ -48,6 +49,33 @@ class _MyAppState extends State<MyApp> {
     await amplify.configure(amplifyconfig);
     setState(() {
       _isAmplifyConfigured = true;
+    });
+  }
+
+  subscribe() async {
+    print('In subscribe');
+    String graphQLDocument = '''subscription MySubscription {
+        onCreateBlog {
+          id
+          name
+          createdAt
+        }
+      }''';
+    var operation = await Amplify.API
+        .subscribe(request: GraphQLRequest(document: graphQLDocument));
+
+    Stream<Map<String, dynamic>> stream = operation.stream;
+
+    stream.listen((event) {
+      print("Subscription event: $event");
+    }).onError((error) => print("Subscription error $error"));
+
+    var unsubscribe = () {
+      operation.cancel();
+    };
+
+    setState(() {
+      _unsubscribe = unsubscribe;
     });
   }
 
@@ -119,6 +147,20 @@ class _MyAppState extends State<MyApp> {
                 child: RaisedButton(
                   onPressed: _isAmplifyConfigured ? mutate : null,
                   child: Text('Run Mutation'),
+                ),
+              ),
+              Padding(padding: EdgeInsets.all(10.0)),
+              Center(
+                child: RaisedButton(
+                  onPressed: _isAmplifyConfigured ? subscribe : null,
+                  child: Text('Subscribe'),
+                ),
+              ),
+              Padding(padding: EdgeInsets.all(10.0)),
+              Center(
+                child: RaisedButton(
+                  onPressed: _isAmplifyConfigured ? _unsubscribe : null,
+                  child: Text('Unsubscribe'),
                 ),
               ),
               Padding(padding: EdgeInsets.all(5.0)),

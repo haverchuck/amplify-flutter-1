@@ -45,4 +45,9 @@ class AmplifyAPI extends APIPluginInterface {
   GraphQLOperation<T> mutate<T>({@required GraphQLRequest<T> request}) {
     return _instance.mutate(request: request);
   }
+
+  Future<GraphQLSubscriptionOperation<T>> subscribe<T>(
+      {@required GraphQLRequest<T> request}) {
+    return _instance.subscribe(request: request);
+  }
 }

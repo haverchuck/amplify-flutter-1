@@ -32,4 +32,9 @@ abstract class APIPluginInterface extends PlatformInterface {
   GraphQLOperation<T> mutate<T>({@required GraphQLRequest<T> request}) {
     throw UnimplementedError('mutate() has not been implemented.');
   }
+
+  Future<GraphQLSubscriptionOperation<T>> subscribe<T>(
+      {@required GraphQLRequest<T> request}) {
+    throw UnimplementedError('subscribe() has not been implemented.');
+  }
 }

@@ -38,4 +38,9 @@ class APICategory {
   GraphQLOperation<T> mutate<T>({@required GraphQLRequest<T> request}) {
     return plugins[0].mutate(request: request);
   }
+
+  Future<GraphQLSubscriptionOperation<T>> subscribe<T>(
+      {@required GraphQLRequest request}) {
+    return plugins[0].subscribe(request: request);
+  }
 }
