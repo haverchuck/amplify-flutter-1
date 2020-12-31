@@ -44,8 +44,9 @@ class APICategory {
         @required GraphQLRequest request,
         void Function() onEstablished,
         @required void Function(Map<String, dynamic>) onData,
-        void Function(PlatformException) onError
+        void Function(dynamic) onError,
+        void Function() onDone
       }) {
-    return plugins[0].subscribe(request: request, onEstablished: onEstablished, onData: onData, onError: onError);
+    return plugins[0].subscribe(request: request, onEstablished: onEstablished, onData: onData, onError: onError, onDone: onDone);
   }
 }

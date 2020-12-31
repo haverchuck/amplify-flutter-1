@@ -21,6 +21,7 @@ import android.os.Handler
 import android.os.Looper
 import androidx.annotation.NonNull
 import androidx.annotation.VisibleForTesting
+import com.amazonaws.amplify.amplify_api.types.EventChannelMessageTypes
 import com.amazonaws.amplify.amplify_api.types.FlutterApiErrorMessage
 import com.amplifyframework.api.ApiException
 import com.amplifyframework.api.aws.AWSApiPlugin
@@ -90,13 +91,13 @@ class AmplifyApiPlugin : FlutterPlugin, MethodCallHandler {
       document = request["document"] as String
       variables = request["variables"] as Map<String, Any>
     } catch (e: ClassCastException) {
-      createFlutterError(
+      sendFlutterMethodError(
               flutterResult,
               FlutterApiErrorMessage.ERROR_CASTING_INPUT_IN_PLATFORM_CODE.toString(),
               createErrorMap(e))
       return
     } catch (e: Exception) {
-      createFlutterError(
+      sendFlutterMethodError(
               flutterResult,
               FlutterApiErrorMessage.AMPLIFY_REQUEST_MALFORMED.toString(),
               createErrorMap(e))
@@ -119,7 +120,7 @@ class AmplifyApiPlugin : FlutterPlugin, MethodCallHandler {
         },
         {
           LOG.error("GraphQL query operation failed", it)
-          createFlutterError(
+          sendFlutterMethodError(
                   flutterResult,
                   FlutterApiErrorMessage.AMPLIFY_API_QUERY_FAILED.toString(),
                   createErrorMap(it))
@@ -136,13 +137,13 @@ class AmplifyApiPlugin : FlutterPlugin, MethodCallHandler {
       document = request["document"] as String
       variables = request["variables"] as Map<String, Any>
     } catch (e: ClassCastException) {
-      createFlutterError(
+      sendFlutterMethodError(
               flutterResult,
               FlutterApiErrorMessage.ERROR_CASTING_INPUT_IN_PLATFORM_CODE.toString(),
               createErrorMap(e))
       return
     } catch (e: Exception) {
-      createFlutterError(
+      sendFlutterMethodError(
               flutterResult,
               FlutterApiErrorMessage.AMPLIFY_REQUEST_MALFORMED.toString(),
               createErrorMap(e))
@@ -166,7 +167,7 @@ class AmplifyApiPlugin : FlutterPlugin, MethodCallHandler {
             },
             {
               LOG.error("GraphQL mutate operation failed", it)
-              createFlutterError(
+              sendFlutterMethodError(
                       flutterResult,
                       FlutterApiErrorMessage.AMPLIFY_API_MUTATE_FAILED.toString(),
                       createErrorMap(it))
@@ -178,18 +179,19 @@ class AmplifyApiPlugin : FlutterPlugin, MethodCallHandler {
     var id: String = UUID.randomUUID().toString()
     var document: String
     var variables: Map<String, Any>
+    var established: Boolean = false;
 
     try {
       document = request["document"] as String
       variables = request["variables"] as Map<String, Any>
     } catch (e: ClassCastException) {
-      createFlutterError(
+      sendFlutterMethodError(
               flutterResult,
               FlutterApiErrorMessage.ERROR_CASTING_INPUT_IN_PLATFORM_CODE.toString(),
               createErrorMap(e))
       return
     } catch (e: Exception) {
-      createFlutterError(
+      sendFlutterMethodError(
               flutterResult,
               FlutterApiErrorMessage.AMPLIFY_REQUEST_MALFORMED.toString(),
               createErrorMap(e))
@@ -204,20 +206,26 @@ class AmplifyApiPlugin : FlutterPlugin, MethodCallHandler {
                     GsonVariablesSerializer()
             ),
             {LOG.info("Subscription established: $it");
+              established = true
               handler.post { flutterResult.success(id) }
             },
             {
-              graphqlSubscriptionStreamHandler.sendEvent(it.data, it.errors, id)
+              graphqlSubscriptionStreamHandler.sendEvent(it.data, it.errors, id, EventChannelMessageTypes.EVENT)
             },
             {
               this.subscriptions.remove(id)
-              createFlutterError(
-                      flutterResult,
-                      FlutterApiErrorMessage.AMPLIFY_API_SUBSCRIBE_FAILED_TO_CONNECT.toString(),
-                      createErrorMap(it))
+              if (established) {
+                graphqlSubscriptionStreamHandler.sendError(EventChannelMessageTypes.EVENT.toString(), createErrorMap(it))
+              } else {
+                sendFlutterMethodError(
+                        flutterResult,
+                        FlutterApiErrorMessage.AMPLIFY_API_SUBSCRIBE_FAILED_TO_CONNECT.toString(),
+                        createErrorMap(it))
+              }
             },
             {
               this.subscriptions.remove(id)
+              graphqlSubscriptionStreamHandler.sendEvent(null, emptyList(), id, EventChannelMessageTypes.DONE)
             }
     )
 
@@ -230,13 +238,13 @@ class AmplifyApiPlugin : FlutterPlugin, MethodCallHandler {
     try {
       id = request["id"] as String
     } catch (e: ClassCastException) {
-      createFlutterError(
+      sendFlutterMethodError(
               flutterResult,
               FlutterApiErrorMessage.ERROR_CASTING_INPUT_IN_PLATFORM_CODE.toString(),
               createErrorMap(e))
       return
     } catch (e: Exception) {
-      createFlutterError(
+      sendFlutterMethodError(
               flutterResult,
               FlutterApiErrorMessage.AMPLIFY_REQUEST_MALFORMED.toString(),
               createErrorMap(e))
@@ -249,7 +257,7 @@ class AmplifyApiPlugin : FlutterPlugin, MethodCallHandler {
       LOG.info("Subscription cancelled")
       flutterResult.success(true)
     } else {
-      createFlutterError(
+      sendFlutterMethodError(
               flutterResult,
               FlutterApiErrorMessage.AMPLIFY_API_SUBSCRIPTION_DOES_NOT_EXIST.toString(),
               createErrorMap(InvalidParameterException()))
@@ -276,7 +284,7 @@ class AmplifyApiPlugin : FlutterPlugin, MethodCallHandler {
     return errorMap
   }
 
-  private fun createFlutterError(flutterResult: Result, msg: String, errorMap: Map<String, Any>) {
+  private fun sendFlutterMethodError(flutterResult: Result, msg: String, errorMap: Map<String, Any>) {
     handler.post { flutterResult.error("AmplifyException", msg, errorMap) }
   }
 

@@ -85,9 +85,10 @@ class AmplifyAPIMethodChannel extends AmplifyAPI {
   Future<GraphQLSubscriptionOperation<T>> subscribe<T>(
       {
         @required GraphQLRequest request,
-        @required void Function() onEstablished,
-        void Function(Map<String, dynamic>) onData,
-        @required void Function(PlatformException) onError
+        void Function() onEstablished,
+        @required void Function(Map<String, dynamic>) onData,
+        void Function(dynamic) onError,
+        void Function() onDone
       }) async {
     const _eventChannel =
         EventChannel('com.amazonaws.amplify/api_observe_events');
@@ -107,11 +108,19 @@ class AmplifyAPIMethodChannel extends AmplifyAPI {
           .where((event) {
             return event["id"] == subscriptionId;
           })
-          .map((event) => {"data": event["data"], "errors": event["errors"]})
+          // TODO: Improve this map function
+          .map((event) => {"data": event["payload"]["data"], "errors": event["payload"]["errors"], "type": event["type"]})
           .asBroadcastStream()
           .cast<Map<String, dynamic>>();
 
-      StreamSubscription _subscription = filteredStream.listen(onData);
+      StreamSubscription _subscription = filteredStream.listen((msg) {
+        if (msg["type"] == "DONE") {
+          onDone();
+        } else {
+          onData(msg);
+        }
+      });
+      _subscription.onError(onError);
       
       Function cancel = () {
         _subscription.cancel();

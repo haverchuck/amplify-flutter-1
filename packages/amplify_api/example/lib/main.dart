@@ -68,11 +68,14 @@ class _MyAppState extends State<MyApp> {
             print(msg);
           },
           onEstablished: () {
-            print("SUBSCRIPTION ESTABLISHED");
+            print("Subscription established");
           },
           onError: (e) {
-            print('onError');
+            print("Error occurred");
             print(e);
+          },
+          onDone: () {
+            print("I am so done");
           }
         );
 

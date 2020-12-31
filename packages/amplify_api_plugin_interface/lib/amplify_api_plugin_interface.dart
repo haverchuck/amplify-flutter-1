@@ -37,9 +37,10 @@ abstract class APIPluginInterface extends PlatformInterface {
   Future<GraphQLSubscriptionOperation<T>> subscribe<T>(
       {
         @required GraphQLRequest request,
-        @required void Function() onEstablished,
-        void Function(Map<String, dynamic>) onData,
-        @required void Function(PlatformException) onError
+        void Function() onEstablished,
+        @required void Function(Map<String, dynamic>) onData,
+        void Function(dynamic) onError,
+        void Function() onDone,
       }) {
     throw UnimplementedError('subscribe() has not been implemented.');
   }

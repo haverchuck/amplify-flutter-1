@@ -52,8 +52,9 @@ class AmplifyAPI extends APIPluginInterface {
         @required GraphQLRequest request,
         void Function() onEstablished,
         @required void Function(Map<String, dynamic>) onData,
-        void Function(PlatformException) onError
+        void Function(dynamic) onError,
+        void Function() onDone,
       }) {
-    return _instance.subscribe(request: request, onEstablished: onEstablished, onData: onData, onError: onError);
+    return _instance.subscribe(request: request, onEstablished: onEstablished, onData: onData, onError: onError, onDone: onDone);
   }
 }
