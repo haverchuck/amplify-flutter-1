@@ -62,13 +62,25 @@ class _MyAppState extends State<MyApp> {
         }
       }''';
     var operation = await Amplify.API
-        .subscribe(request: GraphQLRequest(document: graphQLDocument));
+        .subscribe(
+          request: GraphQLRequest(document: graphQLDocument),
+          onData: (msg) {
+            print(msg);
+          },
+          onEstablished: () {
+            print("SUBSCRIPTION ESTABLISHED");
+          },
+          onError: (e) {
+            print('onError');
+            print(e);
+          }
+        );
 
-    Stream<Map<String, dynamic>> stream = operation.stream;
+    // Stream<Map<String, dynamic>> stream = operation.stream;
 
-    stream.listen((event) {
-      print("Subscription event: $event");
-    }).onError((error) => print("Subscription error $error"));
+    // stream.listen((event) {
+    //   print("Subscription event: $event");
+    // }).onError((error) => print("Subscription error $error"));
 
     var unsubscribe = () {
       operation.cancel();

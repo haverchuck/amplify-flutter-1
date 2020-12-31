@@ -16,6 +16,7 @@
 library amplify_api_plugin_interface;
 
 import 'dart:async';
+import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
@@ -34,7 +35,12 @@ abstract class APIPluginInterface extends PlatformInterface {
   }
 
   Future<GraphQLSubscriptionOperation<T>> subscribe<T>(
-      {@required GraphQLRequest<T> request}) {
+      {
+        @required GraphQLRequest request,
+        @required void Function() onEstablished,
+        void Function(Map<String, dynamic>) onData,
+        @required void Function(PlatformException) onError
+      }) {
     throw UnimplementedError('subscribe() has not been implemented.');
   }
 }

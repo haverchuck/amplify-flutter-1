@@ -21,7 +21,7 @@ class GraphQLSubscriptionStreamHandler : EventChannel.StreamHandler {
         handler.post {
             var result: Map<String, Any?> = mapOf(
                     "id" to id,
-                    "data" to data,
+                    "event" to data,
                     "errors" to errors.map {it.message}
             )
 

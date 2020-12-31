@@ -20,10 +20,9 @@ const MethodChannel _channel = MethodChannel('com.amazonaws.amplify/api');
 
 class GraphQLSubscriptionOperation<T> {
   Function _cancel;
-  final Stream<Map<String, dynamic>> stream;
 
   GraphQLSubscriptionOperation(
-      {@required this.stream, @required Function cancel}) {
+      {@required Function cancel}) {
     _cancel = cancel;
   }
 

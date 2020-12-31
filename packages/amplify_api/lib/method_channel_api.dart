@@ -13,6 +13,8 @@
  * permissions and limitations under the License.
  */
 
+import 'dart:async';
+
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 import 'package:amplify_api_plugin_interface/amplify_api_plugin_interface.dart';
@@ -81,7 +83,12 @@ class AmplifyAPIMethodChannel extends AmplifyAPI {
 
   @override
   Future<GraphQLSubscriptionOperation<T>> subscribe<T>(
-      {@required GraphQLRequest<T> request}) async {
+      {
+        @required GraphQLRequest request,
+        @required void Function() onEstablished,
+        void Function(Map<String, dynamic>) onData,
+        @required void Function(PlatformException) onError
+      }) async {
     const _eventChannel =
         EventChannel('com.amazonaws.amplify/api_observe_events');
     _allSubscriptionsStream =
@@ -93,6 +100,9 @@ class AmplifyAPIMethodChannel extends AmplifyAPI {
         request.serializeAsMap(),
       );
 
+      // once the subscriptionId is back, we can assume that onEstablished is done.
+      onEstablished();
+
       Stream<Map<String, dynamic>> filteredStream = _allSubscriptionsStream
           .where((event) {
             return event["id"] == subscriptionId;
@@ -101,14 +111,21 @@ class AmplifyAPIMethodChannel extends AmplifyAPI {
           .asBroadcastStream()
           .cast<Map<String, dynamic>>();
 
+      StreamSubscription _subscription = filteredStream.listen(onData);
+      
       Function cancel = () {
+        _subscription.cancel();
         _cancelSubscription(id: subscriptionId);
       };
 
       return GraphQLSubscriptionOperation(
-          cancel: cancel, stream: filteredStream);
+          cancel: cancel);
     } on PlatformException catch (e) {
-      throw _formatError(e);
+      if (e.message == "AMPLIFY_API_SUBSCRIBE_FAILED_TO_CONNECT") {
+        onError(e);
+      } else {
+        throw _formatError(e);
+      }
     }
   }
 

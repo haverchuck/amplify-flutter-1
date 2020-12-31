@@ -40,7 +40,12 @@ class APICategory {
   }
 
   Future<GraphQLSubscriptionOperation<T>> subscribe<T>(
-      {@required GraphQLRequest request}) {
-    return plugins[0].subscribe(request: request);
+      {
+        @required GraphQLRequest request,
+        void Function() onEstablished,
+        @required void Function(Map<String, dynamic>) onData,
+        void Function(PlatformException) onError
+      }) {
+    return plugins[0].subscribe(request: request, onEstablished: onEstablished, onData: onData, onError: onError);
   }
 }

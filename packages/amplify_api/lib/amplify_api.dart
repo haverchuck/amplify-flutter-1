@@ -16,6 +16,7 @@
 library amplify_api_plugin;
 
 import 'package:amplify_api_plugin_interface/amplify_api_plugin_interface.dart';
+import 'package:flutter/services.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import './method_channel_api.dart';
 import 'package:flutter/foundation.dart';
@@ -47,7 +48,12 @@ class AmplifyAPI extends APIPluginInterface {
   }
 
   Future<GraphQLSubscriptionOperation<T>> subscribe<T>(
-      {@required GraphQLRequest<T> request}) {
-    return _instance.subscribe(request: request);
+      {
+        @required GraphQLRequest request,
+        void Function() onEstablished,
+        @required void Function(Map<String, dynamic>) onData,
+        void Function(PlatformException) onError
+      }) {
+    return _instance.subscribe(request: request, onEstablished: onEstablished, onData: onData, onError: onError);
   }
 }
