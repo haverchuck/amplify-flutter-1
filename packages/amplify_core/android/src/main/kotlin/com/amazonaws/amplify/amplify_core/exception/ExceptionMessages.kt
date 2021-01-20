@@ -37,6 +37,5 @@ class ExceptionMessages {
         @JvmStatic
         val missingExceptionMessage: String =
                 "An unknown exception has happened. $createGithubIssueString"
-
     }
 }
