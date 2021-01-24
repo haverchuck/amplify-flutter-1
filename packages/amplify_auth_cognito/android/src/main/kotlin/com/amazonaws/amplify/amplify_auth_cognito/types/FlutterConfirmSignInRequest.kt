@@ -15,6 +15,8 @@
 
 package com.amazonaws.amplify.amplify_auth_cognito.types
 
+import com.amplifyframework.AmplifyException
+
 data class FlutterConfirmSignInRequest(val map: HashMap<String, *>) {
   val confirmationCode: String = map["confirmationCode"] as String;
   val options: HashMap<String, *>? = map["options"] as HashMap<String, *>?;
