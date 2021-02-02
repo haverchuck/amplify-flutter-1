@@ -15,6 +15,10 @@
 
 package com.amazonaws.amplify.amplify_auth_cognito.types
 
+import com.amplifyframework.auth.AuthException
+import com.amplifyframework.auth.AuthUser
+import com.amplifyframework.core.Amplify
+
 data class FlutterSignInRequest(val map: HashMap<String, *>) {
   val username: String = map["username"] as String;
   val password: String = map["password"] as String;
@@ -23,6 +27,18 @@ data class FlutterSignInRequest(val map: HashMap<String, *>) {
   companion object {
     private const val validationErrorMessage: String = "SignIn Request malformed."
     fun validate(req : HashMap<String, *>?) {
+
+      try {
+        var user: AuthUser? = Amplify.Auth.currentUser;
+        if (user != null) {
+          throw AuthException("There is already a user  signed in.", "Sign out before calling sign in.")
+        }
+      } catch (e: Exception) {
+        if (e is AuthException && e.message == "There is already a user  signed in.") {
+          throw e
+        }
+      }
+
       if (req == null || req !is HashMap<String, *>) {
         throw AmplifyFlutterValidationException(validationErrorMessage, "Request map is null or malformed. Check that request is present and properly formed.")
       } else {
