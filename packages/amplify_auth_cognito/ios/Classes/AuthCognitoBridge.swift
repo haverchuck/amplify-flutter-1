@@ -200,7 +200,7 @@ class AuthCognitoBridge {
                     let signInData = FlutterSignInResult(res: result)
                     flutterResult(signInData.toJSON())
                 case .failure(let error):
-                    self.errorHandler.handleAuthError(authError: error , flutterResult: flutterResult)
+                    self.errorHandler.handleAuthError(authError: error, flutterResult: flutterResult)
 
             }
         }
@@ -213,7 +213,7 @@ class AuthCognitoBridge {
                     let signInData = FlutterSignInResult(res: result)
                     flutterResult(signInData.toJSON())
                 case .failure(let error):
-                    self.errorHandler.handleAuthError(authError: error , flutterResult: flutterResult)
+                    self.errorHandler.handleAuthError(authError: error, flutterResult: flutterResult)
 
             }
         }

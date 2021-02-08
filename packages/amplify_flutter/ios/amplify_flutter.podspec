@@ -15,10 +15,10 @@ Pod::Spec.new do |s|
   s.source = { :git => 'https://github.com/aws-amplify/amplify-flutter.git' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
-  s.dependency 'Amplify'
-  s.dependency 'AWSPluginsCore'
-  s.dependency 'AmplifyPlugins/AWSCognitoAuthPlugin'
-  s.dependency 'AmplifyPlugins/AWSAPIPlugin'
+  s.dependency 'Amplify', '1.6.0'
+  s.dependency 'AWSPluginsCore', '1.6.0'
+  s.dependency 'AmplifyPlugins/AWSCognitoAuthPlugin', '1.6.0'
+  s.dependency 'AmplifyPlugins/AWSAPIPlugin', '1.6.0'
   s.dependency 'amplify_core'
   s.platform = :ios, '11.0'
 

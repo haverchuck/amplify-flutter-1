@@ -23,5 +23,6 @@
 enum AuthProvider {
   google,
   facebook,
-  login_with_amazon,
+  amazon,
+  apple
 } 
