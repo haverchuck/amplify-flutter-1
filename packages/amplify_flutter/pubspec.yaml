@@ -17,6 +17,7 @@ dependencies:
   amplify_datastore_plugin_interface: 0.1.0
   amplify_api_plugin_interface: 0.1.0
   amplify_core: 0.1.0
+  amplify_flutter_web: 0.0.1
 
 dev_dependencies:
   flutter_test:
@@ -32,3 +33,5 @@ flutter:
         pluginClass: Amplify
       ios:
         pluginClass: Amplify
+      web:
+        default_package: amplify_flutter_web

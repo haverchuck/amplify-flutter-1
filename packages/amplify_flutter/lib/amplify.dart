@@ -28,10 +28,10 @@ import 'package:amplify_analytics_plugin_interface/amplify_analytics_plugin_inte
 import 'package:amplify_datastore_plugin_interface/amplify_datastore_plugin_interface.dart';
 import 'package:amplify_api_plugin_interface/amplify_api_plugin_interface.dart';
 
-import './amplify_hub.dart';
+// import './amplify_hub.dart';
 import 'categories/amplify_categories.dart';
 
-export 'package:amplify_core/types/hub/HubChannel.dart';
+// export 'package:amplify_core/types/hub/HubChannel.dart';
 export 'package:amplify_core/types/index.dart';
 
 part 'method_channel_amplify.dart';
@@ -59,7 +59,7 @@ class AmplifyClass extends PlatformInterface {
   bool _isConfigured = false;
 
   // ignore: public_member_api_docs
-  AmplifyHub Hub = AmplifyHub();
+  // AmplifyHub Hub = AmplifyHub();
 
   /// Adds one plugin at a time. Note: this method can only
   /// be called before Amplify has been configured.
@@ -71,7 +71,7 @@ class AmplifyClass extends PlatformInterface {
       try {
         if (plugin is AuthPluginInterface) {
           Auth.addPlugin(plugin);
-          Hub.addChannel(HubChannel.Auth, plugin.streamController);
+          // Hub.addChannel(HubChannel.Auth, plugin.streamController);
         } else if (plugin is AnalyticsPluginInterface) {
           Analytics.addPlugin(plugin);
         } else if (plugin is StoragePluginInterface) {
@@ -85,7 +85,7 @@ class AmplifyClass extends PlatformInterface {
             // method will throw an exception in android. We will ignore this
             // like other plugins and move on. Other exceptions fall through.
           }
-          Hub.addChannel(HubChannel.DataStore, plugin.streamController);
+          // Hub.addChannel(HubChannel.DataStore, plugin.streamController);
         } else if (plugin is APIPluginInterface) {
           await API.addPlugin(plugin);
         } else {
