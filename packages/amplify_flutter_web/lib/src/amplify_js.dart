@@ -1,11 +1,12 @@
-@JS()
+@JS('aws_amplify')
 library amplifycore;
 
 import 'package:js/js.dart';
 
 
-@JS('aws_amplify.Amplify')
-class AmplifyJS {
+@JS('Amplify')
+abstract class AmplifyJS {
+  external static num get length;
   external static AmplifyJS configure(ConfigOptions config);
 }
 

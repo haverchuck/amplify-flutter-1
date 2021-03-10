@@ -43,7 +43,29 @@ class AmplifyFlutterWebWeb {
 
   /// Returns a [String] containing the version of the platform.
   Future<bool> onConfigure() {
-    AmplifyJS.configure(ConfigOptions(auth: AuthOptions(aws_project_region: 'us-west-2')));
+    var len = AmplifyJS.length;
+    print(len);
+    // AmplifyJS.configure(ConfigOptions(auth: AuthOptions(aws_project_region: 'us-west-2')));
     return Future.value(false);
   }
 }
+
+
+
+//   /// Returns a [String] containing the version of the platform.
+//   bool onConfigure() {
+//     var amp = js.JsObject.fromBrowserObject(js.context['aws_amplify']);
+//     var Amplify = amp["Amplify"];
+//     var config = js.JsObject(js.context['Object']);
+//     var auth = js.JsObject(js.context['Object']);
+//     config['Auth'] = auth;
+//     try {
+//       Amplify.callMethod('configure', [config]);
+//     } catch(e) {
+//       print(e);
+//     }
+
+//     print(Amplify.toString());
+//     return false;
+//   }
+// }
