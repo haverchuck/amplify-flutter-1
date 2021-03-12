@@ -1,4 +1,4 @@
-name: amplify_flutter_web
+name: amplify_auth_cognito_web
 description: A new flutter plugin project.
 version: 0.0.1
 author:
@@ -13,9 +13,9 @@ dependencies:
     sdk: flutter
   flutter_web_plugins:
     sdk: flutter
-  js: ^0.6.3
+  amplify_auth_cognito: 0.1.0
   amplify_core: 0.1.0
-
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -32,8 +32,8 @@ flutter:
   plugin:
     platforms:
       web:
-        pluginClass: AmplifyFlutterWebWeb
-        fileName: amplify_flutter_web.dart
+        pluginClass: AmplifyAuthCognitoWebWeb
+        fileName: amplify_auth_cognito_web.dart
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:

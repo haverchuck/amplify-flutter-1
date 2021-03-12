@@ -13,6 +13,7 @@ dependencies:
   amplify_auth_plugin_interface: 0.1.0
   amplify_core: 0.1.0
   plugin_platform_interface: ^1.0.1
+  amplify_auth_cognito_web: 0.0.1
 
 dev_dependencies:
   flutter_test:
@@ -26,3 +27,5 @@ flutter:
         pluginClass: AuthCognito
       ios:
         pluginClass: AuthCognito
+      web:
+        default_package: amplify_auth_cognito_web

@@ -1,5 +1,5 @@
 @JS()
-library example;
+library amplifyflutter;
 
 import 'package:js/js.dart';
 import 'package:js/js_util.dart' as util;

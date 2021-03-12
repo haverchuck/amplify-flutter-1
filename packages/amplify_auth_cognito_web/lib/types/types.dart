@@ -1,0 +1,1 @@
+export 'package:amplify_auth_cognito_web/types/SignUpResultJS.dart';

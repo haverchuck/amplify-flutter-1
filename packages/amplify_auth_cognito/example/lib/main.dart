@@ -133,8 +133,9 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<bool> _isSignedIn() async {
-    final session = await Amplify.Auth.fetchAuthSession();
-    return session.isSignedIn;
+    // final session = await Amplify.Auth.fetchAuthSession();
+    // return session.isSignedIn;
+    return false;
   }
 
   void _signOut() async {

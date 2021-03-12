@@ -1,4 +1,3 @@
-
 import 'dart:js' as js;
 import "dart:convert";
 import 'dart:async';
@@ -8,7 +7,7 @@ import 'dart:async';
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html show window;
 import 'src/amplify_js.dart';
-import 'src/js_object.dart';
+import 'package:amplify_core/interop/object.dart';
 import 'package:js/js_util.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
@@ -46,20 +45,11 @@ class AmplifyFlutterWebWeb {
   Future<bool> onConfigure() async {
     try {
       AmplifyJS.configure(ConfigOptions(Auth: AuthOptions(
-        region: '',
+        region: 'us-west-2',
         identityPoolId: '',
-        identityPoolRegion: '',
-        userPoolId: '',
+        identityPoolRegion: 'us-west-2',
+        userPoolId: 'us-west-',
         userPoolWebClientId: ''
-      )));
-
-
-      await promiseToFuture(AuthJS.signUp(SignUpParams(
-        username: '',
-        password: '',
-        attributes: Attributes(
-          email: ''
-        )
       )));
 
       return Future.value(true);
@@ -69,23 +59,3 @@ class AmplifyFlutterWebWeb {
     }
   }
 }
-
-
-
-//   /// Returns a [String] containing the version of the platform.
-//   bool onConfigure() {
-//     var amp = js.JsObject.fromBrowserObject(js.context['aws_amplify']);
-//     var Amplify = amp["Amplify"];
-//     var config = js.JsObject(js.context['Object']);
-//     var auth = js.JsObject(js.context['Object']);
-//     config['Auth'] = auth;
-//     try {
-//       Amplify.callMethod('configure', [config]);
-//     } catch(e) {
-//       print(e);
-//     }
-
-//     print(Amplify.toString());
-//     return false;
-//   }
-// }
